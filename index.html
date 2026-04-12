@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hopbox — SSH into your dev environment</title>
+<meta name="description" content="Self-hosted SSH gateway that drops you into isolated Docker dev containers. No VPN, no browser, just ssh.">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(125,211,252,0.08), transparent 60%),
+      radial-gradient(800px 500px at -10% 110%, rgba(167,139,250,0.08), transparent 60%),
+      #0b0d12;
+    color: #e6e8eb;
+  }
+  main { max-width: 720px; padding: 3rem 1.5rem; }
+  .tag {
+    display: inline-block;
+    padding: .2rem .6rem;
+    border: 1px solid #242938;
+    border-radius: 999px;
+    font-size: .72rem;
+    color: #9aa3ae;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-size: 2.75rem;
+    margin: 0 0 .75rem;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+  }
+  .lede {
+    color: #9aa3ae;
+    line-height: 1.55;
+    font-size: 1.05rem;
+    margin: 0 0 2rem;
+  }
+  code, pre {
+    background: #151922;
+    border: 1px solid #242938;
+    border-radius: 8px;
+    color: #e6e8eb;
+    font-family: inherit;
+  }
+  code { padding: .15rem .4rem; font-size: .9em; }
+  pre  { padding: 1rem 1.25rem; overflow-x: auto; font-size: .95rem; }
+  pre .prompt { color: #7dd3fc; user-select: none; }
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin: 2rem 0;
+  }
+  .card {
+    border: 1px solid #242938;
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    background: rgba(21, 25, 34, 0.5);
+  }
+  .card h3 { margin: 0 0 .35rem; font-size: .95rem; color: #e6e8eb; font-weight: 600; }
+  .card p  { margin: 0; font-size: .82rem; color: #9aa3ae; line-height: 1.45; }
+  .links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  a    { color: #7dd3fc; text-decoration: none; font-weight: 500; }
+  a:hover { text-decoration: underline; }
+  footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #242938;
+    color: #5b6472;
+    font-size: .78rem;
+  }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">self-hosted · open source · MIT</span>
+  <h1>Hopbox</h1>
+  <p class="lede">Self-hosted SSH gateway that drops you into isolated Docker dev containers. No VPN, no browser, no IDE tunnel — just <code>ssh</code>.</p>
+
+<pre><span class="prompt">$</span> ssh -p 2222 hop@hopbox.dev</pre>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Per-user boxes</h3>
+      <p>Each SSH key gets its own Docker container with a persistent home directory.</p>
+    </div>
+    <div class="card">
+      <h3>Tool wizard</h3>
+      <p>Pick your multiplexer, editor, shell, and runtimes on first connect.</p>
+    </div>
+    <div class="card">
+      <h3>Multi-device</h3>
+      <p>Link new keys to existing boxes with a one-time code.</p>
+    </div>
+    <div class="card">
+      <h3>Observable</h3>
+      <p>Structured logs, Prometheus metrics, Grafana dashboards.</p>
+    </div>
+  </div>
+
+  <div class="links">
+    <a href="https://github.com/hopboxdev/hopbox">GitHub →</a>
+    <a href="https://github.com/hopboxdev/hopbox#quick-start">Install →</a>
+    <a href="https://github.com/hopboxdev/hopbox/releases">Releases →</a>
+  </div>
+
+  <footer>Ship your dev environment to a VPS in a minute.</footer>
+</main>
+</body>
+</html>
