@@ -3,382 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Hopbox — Hop into your dev environment</title>
+<title>Hopbox — your dev environments, anywhere</title>
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<meta name="description" content="Self-hosted SSH gateway that drops you into isolated Docker dev containers. No VPN, no browser, just ssh.">
+<meta name="description" content="Self-hosted, vendor-neutral control plane for development environments. Persistent, reproducible workspaces on Docker or Kubernetes — reachable anywhere via a reverse-dialing agent.">
+<meta property="og:title" content="Hopbox — your dev environments, anywhere">
+<meta property="og:description" content="A self-hosted control plane for dev environments. Workspaces on Docker or Kubernetes, reachable behind NAT or a private cluster.">
 <style>
-  :root { color-scheme: light; }
+  :root { color-scheme: light; --ink:#16121f; --muted:#5b5468; --accent:#650add; --accent2:#9d4bff; --line:rgba(101,10,221,.12); }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    min-height: 100vh; display: flex; flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: #fafafa;
-    color: #1a1a1a;
-    overflow-x: hidden;
+    background: #fafafa; color: var(--ink); line-height: 1.5; overflow-x: hidden;
   }
-
-  /* Subtle gradient mesh */
-  .bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .bg .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    animation: float 20s ease-in-out infinite;
-  }
-  .bg .orb-1 {
-    width: 600px; height: 600px;
-    top: -20%; right: -5%;
-    background: rgba(101,10,221,0.06);
-    animation-delay: 0s;
-  }
-  .bg .orb-2 {
-    width: 500px; height: 500px;
-    bottom: -15%; left: -8%;
-    background: rgba(255,80,47,0.05);
-    animation-delay: -7s;
-  }
-  .bg .orb-3 {
-    width: 350px; height: 350px;
-    top: 45%; left: 50%;
-    transform: translateX(-50%);
-    background: rgba(101,10,221,0.03);
-    animation-delay: -14s;
-  }
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -20px) scale(1.05); }
-    66% { transform: translate(-20px, 15px) scale(0.95); }
-  }
-
-  /* Nav */
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 2.5rem;
-    position: relative;
-    z-index: 10;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    text-decoration: none;
-    color: #1a1a1a;
-  }
-  .logo-text {
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-  .hero-logo {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 1.5rem;
-  }
-  .hero-logo img {
-    width: 100%;
-    height: 100%;
-  }
-  .nav-links {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .nav-links a {
-    color: #666;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    padding: 0.4rem 0.9rem;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-  .nav-links a:hover { color: #1a1a1a; background: rgba(0,0,0,0.04); }
-
-  /* Hero */
-  .hero {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0 1.5rem 3rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .badge {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-    font-weight: 600;
-    padding: 0.35rem 1rem;
-    border-radius: 999px;
-    border: 1px solid rgba(101,10,221,0.2);
-    background: rgba(101,10,221,0.05);
-    color: #650ADD;
-    margin-bottom: 2rem;
-  }
-
-  h1 {
-    font-size: clamp(3rem, 7vw, 5rem);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1.05;
-    margin-bottom: 1.25rem;
-    color: #1a1a1a;
-  }
-
-  .subtitle {
-    color: #666;
-    font-size: 1.15rem;
-    line-height: 1.6;
-    max-width: 420px;
-    font-weight: 400;
-  }
-  .subtitle strong {
-    color: #650ADD;
-    font-weight: 600;
-  }
-
-  /* Command block */
-  .cmd-wrapper {
-    margin-top: 2.5rem;
-    position: relative;
-  }
-  .cmd-wrapper::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 13px;
-    background: linear-gradient(135deg, rgba(101,10,221,0.4), rgba(255,80,47,0.4));
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  .cmd-wrapper:hover::before { opacity: 1; }
-  .cmd {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 0.85rem 0.85rem 0.85rem 1.5rem;
-    gap: 1.25rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .cmd:hover { border-color: #ccc; }
-  .cmd-text { flex: 1; white-space: nowrap; color: #333; }
-  .cmd .prompt { color: #650ADD; user-select: none; }
-  .cmd-copy {
-    background: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    color: #888;
-    padding: 0.45rem 0.75rem;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-family: -apple-system, system-ui, sans-serif;
-    font-weight: 500;
-  }
-  .cmd-copy:hover { border-color: #ccc; color: #555; background: #eee; }
-  .cmd-copy.copied { color: #16a34a; border-color: rgba(22,163,74,0.3); background: rgba(22,163,74,0.05); }
-  .cmd-copy svg { width: 14px; height: 14px; }
-
-  /* Buttons */
-  .buttons {
-    margin-top: 2rem;
-    display: flex;
-    gap: 0.75rem;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.6rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, #650ADD, #FF502F);
-    color: #fff;
-    box-shadow: 0 2px 12px rgba(101,10,221,0.2);
-  }
-  .btn-primary:hover { box-shadow: 0 4px 20px rgba(101,10,221,0.3); transform: translateY(-1px); }
-  .btn-ghost {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    color: #555;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-  }
-  .btn-ghost:hover { border-color: #ccc; color: #333; background: #fafafa; }
-  .btn-ghost svg { width: 16px; height: 16px; }
-
-  /* Features */
-  .features {
-    margin-top: 3.5rem;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-    max-width: 720px;
-    width: 100%;
-  }
-  .feature {
-    text-align: center;
-    padding: 1rem 0.5rem;
-  }
-  .feature-icon {
-    font-size: 1.6rem;
-    margin-bottom: 0.6rem;
-    color: #650ADD;
-  }
-  .feature-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 0.35rem;
-  }
-  .feature-desc {
-    font-size: 0.85rem;
-    color: #777;
-    line-height: 1.5;
-  }
-  .feature-desc code {
-    background: rgba(101,10,221,0.06);
-    border: none;
-    padding: 0.1rem 0.3rem;
-    border-radius: 3px;
-    font-size: 0.8rem;
-    color: #650ADD;
-  }
-
-  /* Footer */
-  footer {
-    padding: 1.5rem 2.5rem;
-    text-align: center;
-    color: #aaa;
-    font-size: 0.75rem;
-    position: relative;
-    z-index: 1;
-    border-top: 1px solid #eee;
-  }
-  footer a { color: #999; text-decoration: none; transition: color 0.2s; }
-  footer a:hover { color: #555; }
-
-  /* Mobile */
-  @media (max-width: 600px) {
-    nav { padding: 1rem 1.25rem; }
-    .hero { padding: 0 1.25rem 2rem; }
-    .cmd { font-size: 0.85rem; padding: 0.7rem 0.7rem 0.7rem 1rem; }
-    .buttons { flex-direction: column; align-items: center; width: 100%; max-width: 300px; }
-    .btn { width: 100%; justify-content: center; }
-    .features { grid-template-columns: repeat(2, 1fr); }
-  }
+  a { color: inherit; }
+  .bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(110px); }
+  .orb-1 { width: 620px; height: 620px; top: -22%; right: -6%; background: rgba(101,10,221,.07); }
+  .orb-2 { width: 520px; height: 520px; bottom: -20%; left: -8%; background: rgba(157,75,255,.06); }
+  .wrap { position: relative; z-index: 1; width: 100%; max-width: 920px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 28px 0; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.02em; font-size: 19px; }
+  .brand img { width: 30px; height: 30px; }
+  nav a { text-decoration: none; color: var(--muted); font-size: 15px; font-weight: 500; padding: 8px 12px; border-radius: 8px; }
+  nav a:hover { color: var(--ink); background: rgba(101,10,221,.06); }
+  .hero { padding: 64px 0 40px; }
+  .hero h1 { font-size: clamp(38px, 6vw, 60px); line-height: 1.05; letter-spacing: -.035em; font-weight: 800; }
+  .hero h1 .grad { background: linear-gradient(120deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { margin-top: 22px; font-size: clamp(17px, 2.4vw, 20px); color: var(--muted); max-width: 640px; }
+  .cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn { text-decoration: none; font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 11px; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #560ab8; }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); }
+  .btn-ghost:hover { background: rgba(101,10,221,.05); }
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; padding: 28px 0 8px; }
+  .card { padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.6); }
+  .card h3 { font-size: 16px; letter-spacing: -.01em; margin-bottom: 8px; }
+  .card p { font-size: 14.5px; color: var(--muted); }
+  .code { margin: 36px 0 12px; background: #16121f; color: #e8e3f5; border-radius: 16px; padding: 22px 24px; font: 13.5px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-x: auto; }
+  .code .c { color: #8b80a8; }
+  .code .p { color: #9d4bff; }
+  footer { margin-top: auto; padding: 40px 0; color: var(--muted); font-size: 14px; display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+  .note { font-size: 13px; color: var(--muted); margin-top: 10px; }
 </style>
 </head>
 <body>
+<div class="bg"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+<div class="wrap">
+  <header>
+    <div class="brand"><img src="logo.svg" alt="Hopbox logo"><span>Hopbox</span></div>
+    <nav><a href="https://github.com/hopboxdev/hopbox">GitHub</a></nav>
+  </header>
 
-<div class="bg">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <section class="hero">
+    <h1>Your dev environments,<br><span class="grad">anywhere.</span></h1>
+    <p>Hopbox is a self-hosted, vendor-neutral control plane for development
+       environments. Run one control plane; give your team isolated, persistent,
+       reproducible workspaces on Docker or Kubernetes — reachable from anywhere,
+       even behind NAT or a private cluster.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/hopboxdev/hopbox">Get started</a>
+      <a class="btn btn-ghost" href="https://github.com/hopboxdev/hopbox#how-it-works">How it works</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="card"><h3>Reverse-dialing agent</h3><p>Each workspace dials out and holds one multiplexed connection. The control plane never needs a route in — NAT and private clusters just work.</p></div>
+    <div class="card"><h3>Swappable providers</h3><p>Compute, storage, ingress, identity, build, metering — six versioned contracts. Docker today, Kubernetes the same day, your brick tomorrow.</p></div>
+    <div class="card"><h3>Unlimited endpoints</h3><p>A Host-routed HTTPS gateway with one wildcard cert gives every workspace its own URL — no port allocation, no per-user DNS.</p></div>
+    <div class="card"><h3>Declarative core</h3><p>A reconciler drives each workspace toward its spec and heals it when it drifts. The same engine scales from a laptop to a platform team.</p></div>
+  </section>
+
+  <pre class="code"><span class="c"># spin up a workspace, run a command, open a shell</span>
+hopbox create demo <span class="p">--image</span> ubuntu:24.04
+hopbox exec demo -- uname -a
+hopbox shell demo
+
+<span class="c"># expose a port — reachable at https://app-&lt;id&gt;.gw.your-domain</span>
+hopbox create web <span class="p">--image</span> python:3-slim <span class="p">--expose</span> app:8000</pre>
+  <p class="note">Self-hosted and open. Built as the successor to the original hopbox SSH gateway — the good parts of the UX, with the seams as the architecture.</p>
+
+  <footer>
+    <span>© Hopbox</span>
+    <span><a href="https://github.com/hopboxdev/hopbox">github.com/hopboxdev/hopbox</a></span>
+  </footer>
 </div>
-
-<nav>
-  <a href="/" class="logo">
-    <span class="logo-text">Hopbox</span>
-  </a>
-  <div class="nav-links">
-    <a href="https://github.com/hopboxdev/hopbox">GitHub</a>
-    <a href="https://github.com/hopboxdev/hopbox#quick-start">Install</a>
-  </div>
-</nav>
-
-<main class="hero">
-  <div class="hero-logo"><img src="logo.svg" alt="Hopbox"></div>
-  <h1>Hop into your dev environment.</h1>
-  <p class="subtitle">Your own dev environment on any server.<br><strong>One command</strong> to connect. No VPN, no browser, no tunnel.</p>
-
-  <div class="cmd-wrapper">
-    <div class="cmd">
-      <div class="cmd-text">
-        <span class="prompt">$</span> ssh hop@hopbox.dev
-      </div>
-      <button class="cmd-copy" onclick="copyCmd(this)" aria-label="Copy command">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-        </svg>
-        <span>Copy</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="buttons">
-    <a href="https://github.com/hopboxdev/hopbox#quick-start" class="btn btn-primary">Get Started</a>
-    <a href="https://github.com/hopboxdev/hopbox" class="btn btn-ghost">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-      GitHub
-    </a>
-  </div>
-
-  <div class="features">
-    <div class="feature">
-      <div class="feature-icon">&#8594;</div>
-      <div class="feature-title">SSH-native</div>
-      <div class="feature-desc">No client to install. Just <code>ssh</code> from any terminal.</div>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">&#9634;</div>
-      <div class="feature-title">Isolated</div>
-      <div class="feature-desc">Each user gets their own Docker container with a persistent home.</div>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">&#9881;</div>
-      <div class="feature-title">Your tools</div>
-      <div class="feature-desc">Pick your editor, shell, mux, and runtimes on first connect.</div>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">&#8644;</div>
-      <div class="feature-title">Multi-device</div>
-      <div class="feature-desc">Link SSH keys across machines with a one-time code.</div>
-    </div>
-  </div>
-
-</main>
-
-<footer>ELv2 Licensed &middot; <a href="https://github.com/hopboxdev">hopboxdev</a></footer>
-
-<script>
-function copyCmd(btn) {
-  navigator.clipboard.writeText('ssh hop@hopbox.dev');
-  btn.classList.add('copied');
-  btn.querySelector('span').textContent = 'Copied!';
-  setTimeout(() => {
-    btn.classList.remove('copied');
-    btn.querySelector('span').textContent = 'Copy';
-  }, 2000);
-}
-</script>
 </body>
 </html>
