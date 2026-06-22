@@ -5,90 +5,155 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Hopbox — your dev environments, anywhere</title>
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<meta name="description" content="Self-hosted, vendor-neutral control plane for development environments. Persistent, reproducible workspaces on Docker or Kubernetes — reachable anywhere via a reverse-dialing agent.">
+<meta name="description" content="Hopbox — a self-hosted, vendor-neutral control plane for development environments. Persistent, reproducible workspaces on Docker or Kubernetes, reachable anywhere via a reverse-dialing agent.">
+<meta name="theme-color" content="#08070d">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hopbox.dev/">
 <meta property="og:title" content="Hopbox — your dev environments, anywhere">
-<meta property="og:description" content="A self-hosted control plane for dev environments. Workspaces on Docker or Kubernetes, reachable behind NAT or a private cluster.">
+<meta property="og:description" content="A self-hosted control plane for dev environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere.">
+<meta property="og:image" content="https://hopbox.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hopbox — your dev environments, anywhere">
+<meta name="twitter:description" content="A self-hosted control plane for dev environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere.">
+<meta name="twitter:image" content="https://hopbox.dev/og.png">
 <style>
-  :root { color-scheme: light; --ink:#16121f; --muted:#5b5468; --accent:#650add; --accent2:#9d4bff; --line:rgba(101,10,221,.12); }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    min-height: 100vh; display: flex; flex-direction: column;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: #fafafa; color: var(--ink); line-height: 1.5; overflow-x: hidden;
+  :root{ --bg:#08070d; --panel:#0f0e17; --line:rgba(255,255,255,.08); --ink:#f4f2fb; --muted:#a09bb5; --accent:#8b5cff; --accent2:#c08bff; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .glow{position:absolute;border-radius:50%;filter:blur(140px)}
+  .g1{width:680px;height:680px;top:-25%;right:-8%;background:rgba(139,92,255,.20)}
+  .g2{width:520px;height:520px;bottom:-20%;left:-10%;background:rgba(192,139,255,.12)}
+  .grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 50% at 50% 0,#000,transparent 75%);opacity:.5}
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
+  .herowrap{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;padding:52px 0 22px}
+  .herowrap>*{min-width:0}
+  @media(max-width:900px){.herowrap{grid-template-columns:1fr;gap:30px;padding:34px 0 10px}}
+  header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:19px;letter-spacing:-.02em}
+  .brand img{width:30px;height:30px}
+  .nav{display:flex;gap:6px;align-items:center}
+  .nav a{color:var(--muted);font-size:14.5px;font-weight:500;padding:9px 14px;border-radius:9px}
+  .nav a:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+  .nav .ghub{border:1px solid var(--line);border-radius:9px}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);border:1px solid var(--line);padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.02)}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:#3ddc84;box-shadow:0 0 10px #3ddc84}
+  .hero{padding:0;max-width:none}
+  h1{font-size:clamp(38px,5vw,60px);line-height:1.03;letter-spacing:-.04em;font-weight:800;margin:22px 0 0}
+  h1 .grad{background:linear-gradient(110deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin-top:24px;font-size:clamp(17px,2.3vw,20px);color:var(--muted);max-width:600px}
+  .cta{margin-top:34px;display:flex;gap:13px;flex-wrap:wrap}
+  .btn{font-weight:600;font-size:15px;padding:13px 22px;border-radius:12px}
+  .btn-p{background:linear-gradient(110deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 30px rgba(139,92,255,.35)}
+  .btn-p:hover{filter:brightness(1.08)}
+  .btn-g{border:1px solid var(--line);color:var(--ink)}
+  .btn-g:hover{background:rgba(255,255,255,.05)}
+  .herocmd{margin-top:28px;display:flex;align-items:center;gap:10px;background:#0b0a12;border:1px solid var(--line);border-radius:12px;padding:11px 11px 11px 16px;width:100%;max-width:560px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .herocmd code{flex:1;min-width:0;font:13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#d8d3ea;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+  .herocmd code::-webkit-scrollbar{display:none}
+  .herocmd code::before{content:"$ ";color:var(--accent2)}
+  .herocmd .copy{flex:none;width:36px;height:36px;display:grid;place-items:center;padding:0;color:#15121d;background:linear-gradient(110deg,var(--accent),var(--accent2));border:none;border-radius:9px;cursor:pointer}
+  .herocmd .copy:hover{filter:brightness(1.08)}
+  .herocmd .copy .i-ok{display:none}
+  .herocmd .copy.ok .i-copy{display:none}
+  .herocmd .copy.ok .i-ok{display:block}
+  .cta .subtle{color:var(--muted);font-size:14.5px;font-weight:500;padding:13px 8px}
+  .cta .subtle:hover{color:var(--ink)}
+  /* diagram */
+  .diagram{margin:40px 0;padding:30px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent)}
+  .flow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .node{flex:1;min-width:150px;text-align:center;padding:18px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+  .node .ic{font-size:22px}
+  .node .t{font-weight:600;font-size:14px;margin-top:8px}
+  .node .d{font-size:12px;color:var(--muted);margin-top:3px}
+  .node.gw{border-color:rgba(139,92,255,.4);box-shadow:0 0 40px rgba(139,92,255,.12) inset}
+  .arrow{color:var(--accent2);font-size:13px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .arrow b{font-weight:600}
+  .arrow small{color:var(--muted);font-size:10.5px}
+  /* terminal */
+  .term{margin:0;border:1px solid var(--line);border-radius:16px;background:#0b0a12;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .term .bar{display:flex;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line)}
+  .term .bar i{width:11px;height:11px;border-radius:50%;background:#2a2735}
+  .term pre{margin:0;padding:20px 22px;font:13.5px/1.85 ui-monospace,SFMono-Regular,Menlo,monospace;color:#d8d3ea;min-height:210px;overflow-x:auto}
+  .term .c{color:#6f6a85}.term .p{color:var(--accent2)}.term .o{color:#9be6b4}
+  .term .line{display:block;opacity:0;animation:show .25s forwards}
+  .l1{animation-delay:.3s}.l2{animation-delay:1.1s}.l3{animation-delay:1.9s}.l4{animation-delay:2.7s}.l5{animation-delay:3.4s}.l6{animation-delay:4.2s}
+  .cursor{display:inline-block;width:8px;height:16px;background:var(--accent2);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes show{to{opacity:1}}@keyframes blink{50%{opacity:0}}
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;padding:44px 0}
+  .card{padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent)}
+  .card .k{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(139,92,255,.14);color:var(--accent2);font-size:17px;margin-bottom:13px}
+  .card h3{font-size:15.5px;letter-spacing:-.01em}
+  .card p{font-size:14px;color:var(--muted);margin-top:7px}
+  .install{margin:20px 0 64px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:26px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .install h3{font-size:18px;letter-spacing:-.02em}.install p{color:var(--muted);font-size:14px;margin-top:5px}
+  .install code{display:block;margin-top:0;font:13px/1.6 ui-monospace,monospace;color:#d8d3ea;background:#0b0a12;border:1px solid var(--line);padding:14px 16px;border-radius:11px;white-space:nowrap;overflow-x:auto}
+  footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:13.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer a:hover{color:var(--ink)}
+  @media(max-width:600px){
+    .wrap{padding:0 18px}
+    header{padding:16px 0}
+    .brand{font-size:17px}
+    .nav a{padding:8px 9px;font-size:13px}
+    h1{font-size:36px}
+    .sub{font-size:16px}
+    .herowrap{padding:20px 0 4px}
+    .herocmd{max-width:none}
+    .cta{margin-top:24px}
+    .term pre{font-size:12px;line-height:1.8;padding:16px 16px;min-height:auto}
+    .feat{padding:36px 0;gap:12px}
+    .card{padding:18px}
+    footer{flex-direction:column;gap:7px;text-align:center}
   }
-  a { color: inherit; }
-  .bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .orb { position: absolute; border-radius: 50%; filter: blur(110px); }
-  .orb-1 { width: 620px; height: 620px; top: -22%; right: -6%; background: rgba(101,10,221,.07); }
-  .orb-2 { width: 520px; height: 520px; bottom: -20%; left: -8%; background: rgba(157,75,255,.06); }
-  .wrap { position: relative; z-index: 1; width: 100%; max-width: 920px; margin: 0 auto; padding: 0 24px; }
-  header { padding: 28px 0; display: flex; align-items: center; justify-content: space-between; }
-  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: -.02em; font-size: 19px; }
-  .brand img { width: 30px; height: 30px; }
-  nav a { text-decoration: none; color: var(--muted); font-size: 15px; font-weight: 500; padding: 8px 12px; border-radius: 8px; }
-  nav a:hover { color: var(--ink); background: rgba(101,10,221,.06); }
-  .hero { padding: 64px 0 40px; }
-  .hero h1 { font-size: clamp(38px, 6vw, 60px); line-height: 1.05; letter-spacing: -.035em; font-weight: 800; }
-  .hero h1 .grad { background: linear-gradient(120deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hero p { margin-top: 22px; font-size: clamp(17px, 2.4vw, 20px); color: var(--muted); max-width: 640px; }
-  .cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
-  .btn { text-decoration: none; font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 11px; }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: #560ab8; }
-  .btn-ghost { border: 1px solid var(--line); color: var(--ink); }
-  .btn-ghost:hover { background: rgba(101,10,221,.05); }
-  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; padding: 28px 0 8px; }
-  .card { padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.6); }
-  .card h3 { font-size: 16px; letter-spacing: -.01em; margin-bottom: 8px; }
-  .card p { font-size: 14.5px; color: var(--muted); }
-  .code { margin: 36px 0 12px; background: #16121f; color: #e8e3f5; border-radius: 16px; padding: 22px 24px; font: 13.5px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-x: auto; }
-  .code .c { color: #8b80a8; }
-  .code .p { color: #9d4bff; }
-  footer { margin-top: auto; padding: 40px 0; color: var(--muted); font-size: 14px; display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--ink); }
-  .note { font-size: 13px; color: var(--muted); margin-top: 10px; }
 </style>
 </head>
 <body>
-<div class="bg"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+<div class="bg"><div class="grid"></div><div class="glow g1"></div><div class="glow g2"></div></div>
 <div class="wrap">
   <header>
-    <div class="brand"><img src="logo.svg" alt="Hopbox logo"><span>Hopbox</span></div>
-    <nav><a href="https://github.com/hopboxdev/hopbox">GitHub</a></nav>
+    <div class="brand"><img src="logo.svg" alt=""><span>Hopbox</span></div>
+    <nav class="nav"><a href="https://github.com/hopboxdev/hopbox">Docs</a><a class="ghub" href="https://github.com/hopboxdev/hopbox">★ GitHub</a></nav>
   </header>
 
+  <div class="herowrap">
   <section class="hero">
+    <span class="badge"><span class="dot"></span> Self-hosted · open source</span>
     <h1>Your dev environments,<br><span class="grad">anywhere.</span></h1>
-    <p>Hopbox is a self-hosted, vendor-neutral control plane for development
-       environments. Run one control plane; give your team isolated, persistent,
-       reproducible workspaces on Docker or Kubernetes — reachable from anywhere,
-       even behind NAT or a private cluster.</p>
+    <p class="sub">A self-hosted control plane for development environments. Persistent, reproducible workspaces on Docker or Kubernetes — reachable from anywhere, even behind NAT or a private cluster.</p>
+    <div class="herocmd">
+      <code id="cmd">curl -fsSL https://hopbox.dev/install.sh | sudo sh</code>
+      <button class="copy" aria-label="Copy install command" onclick="navigator.clipboard.writeText(document.getElementById('cmd').textContent);this.classList.add('ok');setTimeout(()=>this.classList.remove('ok'),1600)">
+        <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <svg class="i-ok" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 6"/></svg>
+      </button>
+    </div>
     <div class="cta">
-      <a class="btn btn-primary" href="https://github.com/hopboxdev/hopbox">Get started</a>
-      <a class="btn btn-ghost" href="https://github.com/hopboxdev/hopbox#how-it-works">How it works</a>
+      <a class="btn btn-g" href="https://github.com/hopboxdev/hopbox">★ Star on GitHub</a>
+      <a class="subtle" href="https://github.com/hopboxdev/hopbox">Read the docs →</a>
     </div>
   </section>
 
-  <section class="features">
-    <div class="card"><h3>Reverse-dialing agent</h3><p>Each workspace dials out and holds one multiplexed connection. The control plane never needs a route in — NAT and private clusters just work.</p></div>
-    <div class="card"><h3>Swappable providers</h3><p>Compute, storage, ingress, identity, build, metering — six versioned contracts. Docker today, Kubernetes the same day, your brick tomorrow.</p></div>
-    <div class="card"><h3>Unlimited endpoints</h3><p>A Host-routed HTTPS gateway with one wildcard cert gives every workspace its own URL — no port allocation, no per-user DNS.</p></div>
-    <div class="card"><h3>Declarative core</h3><p>A reconciler drives each workspace toward its spec and heals it when it drifts. The same engine scales from a laptop to a platform team.</p></div>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <pre><span class="line l1"><span class="c"># spin up a workspace</span></span><span class="line l2">$ hopbox create demo <span class="p">--image</span> ubuntu:24.04 <span class="p">--expose</span> app:8000</span><span class="line l3"><span class="o">created demo (a1b2c3) phase=Running</span></span><span class="line l4">$ hopbox exec demo -- uname -a</span><span class="line l5"><span class="o">Linux a1b2c3 6.12 x86_64 GNU/Linux</span></span><span class="line l6">$ open <span class="o">https://app-a1b2c3.gw.yourdomain</span> <span class="cursor"></span></span></pre>
+  </div>
+  </div>
+
+  <section class="feat">
+    <div class="card"><div class="k">↩</div><h3>Reverse-dialing agent</h3><p>Each workspace dials out and holds one multiplexed connection — the control plane never needs a route in.</p></div>
+    <div class="card"><div class="k">⧉</div><h3>Swappable providers</h3><p>Compute, storage, ingress, identity, build, metering — six versioned contracts. Docker, Kubernetes, your brick.</p></div>
+    <div class="card"><div class="k">∞</div><h3>Unlimited endpoints</h3><p>Host-routed HTTPS with one wildcard cert gives every workspace its own URL — no port allocation.</p></div>
+    <div class="card"><div class="k">⟳</div><h3>Declarative core</h3><p>A reconciler drives each workspace to its spec and heals drift. The same engine, laptop to platform.</p></div>
   </section>
 
-  <pre class="code"><span class="c"># spin up a workspace, run a command, open a shell</span>
-hopbox create demo <span class="p">--image</span> ubuntu:24.04
-hopbox exec demo -- uname -a
-hopbox shell demo
-
-<span class="c"># expose a port — reachable at https://app-&lt;id&gt;.gw.your-domain</span>
-hopbox create web <span class="p">--image</span> python:3-slim <span class="p">--expose</span> app:8000</pre>
-  <p class="note">Self-hosted and open. Built as the successor to the original hopbox SSH gateway — the good parts of the UX, with the seams as the architecture.</p>
-
   <footer>
-    <span>© Hopbox</span>
-    <span><a href="https://github.com/hopboxdev/hopbox">github.com/hopboxdev/hopbox</a></span>
+    <span>© Hopbox — successor to the original hopbox SSH gateway</span>
+    <span><a href="https://github.com/hopboxdev/hopbox">GitHub</a> · <a href="https://github.com/hopboxdev/hopbox/releases">Releases</a></span>
   </footer>
 </div>
 </body>
