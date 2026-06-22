@@ -29,7 +29,12 @@
   .glow{position:absolute;border-radius:50%;filter:blur(140px)}
   .g1{width:680px;height:680px;top:-25%;right:-8%;background:rgba(139,92,255,.20)}
   .g2{width:520px;height:520px;bottom:-20%;left:-10%;background:rgba(192,139,255,.12)}
-  .grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 50% at 50% 0,#000,transparent 75%);opacity:.5}
+  .grid{position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(28.6deg,var(--line) 0 1px,transparent 1px 9.9px),
+      repeating-linear-gradient(-28.6deg,var(--line) 0 1px,transparent 1px 9.9px);
+    -webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0,#000,transparent 78%);
+    mask-image:radial-gradient(ellipse 85% 55% at 50% 0,#000,transparent 78%);opacity:.55}
   .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
   .herowrap{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;padding:52px 0 22px}
   .herowrap>*{min-width:0}
