@@ -49,14 +49,14 @@ else
   dl="$base/download/$VERSION"
 fi
 tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
-fetch() { # <name-on-disk> <release-asset>
-  log "downloading $2"
-  curl -fsSL -o "$tmp/$1" "$dl/$2" || die "download failed: $dl/$2 (is there a release with linux/$ARCH assets?)"
+fetch() { # <release-asset.tar.gz> — extracts into $tmp
+  log "downloading $1"
+  curl -fsSL -o "$tmp/$1" "$dl/$1" || die "download failed: $dl/$1 (is there a release with linux/$ARCH assets?)"
+  tar -xzf "$tmp/$1" -C "$tmp" || die "could not extract $1"
 }
-fetch hopboxd      "hopboxd-linux-$ARCH"
-fetch hopbox       "hopbox-linux-$ARCH"
-fetch hopbox-gw    "hopbox-gw-linux-$ARCH"
-fetch hopbox-agent "hopbox-agent-linux-$ARCH"
+# Server bundle (hopboxd, hopbox-gw, hopbox-agent) + the CLI archive (hopbox).
+fetch "hopbox-server_linux_$ARCH.tar.gz"
+fetch "hopbox_linux_$ARCH.tar.gz"
 
 # --- install binaries ---
 install -m755 "$tmp/hopboxd" "$tmp/hopbox" "$tmp/hopbox-gw" "$PREFIX/"

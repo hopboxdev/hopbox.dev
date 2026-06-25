@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Hopbox — your dev environments, anywhere</title>
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<meta name="description" content="Hopbox — a self-hosted, vendor-neutral control plane for development environments. Persistent, reproducible workspaces on Docker or Kubernetes, reachable anywhere via a reverse-dialing agent.">
+<meta name="description" content="Hopbox — a self-hosted, vendor-neutral control plane for development environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere via a reverse-dialing agent — or spun up on demand with a single SSH command.">
 <meta name="theme-color" content="#08070d">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hopbox.dev/">
 <meta property="og:title" content="Hopbox — your dev environments, anywhere">
-<meta property="og:description" content="A self-hosted control plane for dev environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere.">
+<meta property="og:description" content="A self-hosted control plane for dev environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere — or spun up with one SSH command.">
 <meta property="og:image" content="https://hopbox.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Hopbox — your dev environments, anywhere">
-<meta name="twitter:description" content="A self-hosted control plane for dev environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere.">
+<meta name="twitter:description" content="A self-hosted control plane for dev environments. Reproducible workspaces on Docker or Kubernetes, reachable anywhere — or spun up with one SSH command.">
 <meta name="twitter:image" content="https://hopbox.dev/og.png">
 <style>
   :root{ --bg:#08070d; --panel:#0f0e17; --line:rgba(255,255,255,.08); --ink:#f4f2fb; --muted:#a09bb5; --accent:#8b5cff; --accent2:#c08bff; }
@@ -95,6 +95,7 @@
   .card .k{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(139,92,255,.14);color:var(--accent2);font-size:17px;margin-bottom:13px}
   .card h3{font-size:15.5px;letter-spacing:-.01em}
   .card p{font-size:14px;color:var(--muted);margin-top:7px}
+  .card code{font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:#d8d3ea;background:#0b0a12;border:1px solid var(--line);padding:1px 6px;border-radius:6px}
   .install{margin:20px 0 64px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:26px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .install h3{font-size:18px;letter-spacing:-.02em}.install p{color:var(--muted);font-size:14px;margin-top:5px}
   .install code{display:block;margin-top:0;font:13px/1.6 ui-monospace,monospace;color:#d8d3ea;background:#0b0a12;border:1px solid var(--line);padding:14px 16px;border-radius:11px;white-space:nowrap;overflow-x:auto}
@@ -129,7 +130,7 @@
   <section class="hero">
     <span class="badge"><span class="dot"></span> Self-hosted · open source</span>
     <h1>Your dev environments,<br><span class="grad">anywhere.</span></h1>
-    <p class="sub">A self-hosted control plane for development environments. Persistent, reproducible workspaces on Docker or Kubernetes — reachable from anywhere, even behind NAT or a private cluster.</p>
+    <p class="sub">A self-hosted control plane for development environments. Reproducible workspaces on Docker or Kubernetes — reachable from anywhere, even behind NAT or a private cluster, or spun up on demand with a single SSH command.</p>
     <div class="herocmd">
       <code id="cmd">curl -fsSL https://hopbox.dev/install.sh | sudo sh</code>
       <button class="copy" aria-label="Copy install command" onclick="navigator.clipboard.writeText(document.getElementById('cmd').textContent);this.classList.add('ok');setTimeout(()=>this.classList.remove('ok'),1600)">
@@ -137,18 +138,21 @@
         <svg class="i-ok" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 6"/></svg>
       </button>
     </div>
+    <p style="margin-top:13px;font-size:13.5px;color:var(--muted)">Just the client? <a href="https://docs.hopbox.dev/guide/quickstart#install-the-cli" style="color:var(--accent2);font-family:ui-monospace,Menlo,monospace">brew install hopboxdev/tap/hopbox</a></p>
   </section>
 
   <div class="term">
     <div class="bar"><i></i><i></i><i></i></div>
-    <pre><span class="line l1"><span class="c"># spin up a workspace</span></span><span class="line l2">$ hopbox create demo <span class="p">--image</span> ubuntu:24.04 <span class="p">--expose</span> app:8000</span><span class="line l3"><span class="o">created demo (a1b2c3) phase=Running</span></span><span class="line l4">$ hopbox exec demo -- uname -a</span><span class="line l5"><span class="o">Linux a1b2c3 6.12 x86_64 GNU/Linux</span></span><span class="line l6">$ open <span class="o">https://app-a1b2c3.gw.yourdomain</span> <span class="cursor"></span></span></pre>
+    <pre><span class="line l1"><span class="c"># one SSH command — the username is the spec, your key is the identity</span></span><span class="line l2">$ ssh proj:python+1h@hopbox.example.com</span><span class="line l3"><span class="o">proj · python · ephemeral (grace 1h)</span></span><span class="line l4">dev@proj:~$ python --version</span><span class="line l5"><span class="o">Python 3.12.7</span></span><span class="line l6">dev@proj:~$ <span class="cursor"></span></span></pre>
   </div>
   </div>
 
   <section class="feat">
+    <div class="card"><div class="k">❯</div><h3>A box in one SSH command</h3><p><code>ssh proj@host</code> and you're in a fresh workspace — the username is the spec, your key is the identity. No signup, no provisioning; ephemeral and reaped when you disconnect.</p></div>
     <div class="card"><div class="k">↩</div><h3>Reverse-dialing agent</h3><p>Each workspace dials out and holds one multiplexed connection — the control plane never needs a route in.</p></div>
-    <div class="card"><div class="k">⧉</div><h3>Swappable providers</h3><p>Compute, storage, ingress, identity, build, metering — six versioned contracts. Docker, Kubernetes, your brick.</p></div>
+    <div class="card"><div class="k">↦</div><h3>Native SSH &amp; VS Code</h3><p><code>ssh mybox</code>, VS Code Remote, scp and rsync — over short-lived SSH certificates, with no public port exposed.</p></div>
     <div class="card"><div class="k">∞</div><h3>Unlimited endpoints</h3><p>Host-routed HTTPS with one wildcard cert gives every workspace its own URL — no port allocation.</p></div>
+    <div class="card"><div class="k">⧉</div><h3>Swappable providers</h3><p>Compute, storage, ingress, identity, build, metering — six versioned contracts. Docker, Kubernetes, your brick.</p></div>
     <div class="card"><div class="k">⟳</div><h3>Declarative core</h3><p>A reconciler drives each workspace to its spec and heals drift. The same engine, laptop to platform.</p></div>
   </section>
 
