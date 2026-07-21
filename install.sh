@@ -7,4 +7,4 @@
 #   curl -fsSL https://hopbox.dev/install.sh | sudo sh
 #
 # Overrides (HOPBOX_VERSION, HOPBOX_ZONE, HOPBOX_CADDY, …) pass straight through.
-exec sh -c "$(curl -fsSL https://raw.githubusercontent.com/hopboxdev/hopbox/main/deploy/install.sh)"
+exec sh -c "$(curl -fsSL https://raw.githubusercontent.com/hopboxdev/hopbox/main/deploy/install-hopbox.sh)"

@@ -3,348 +3,290 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>hopbox — hop into a box</title>
-<link rel="icon" type="image/svg+xml" href="/logo.svg">
+<title>Hopbox — compute boxes over SSH, for humans and AIs</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta name="description" content="Hopbox is an open-source, self-hosted compute-box substrate. One daemon turns a host into a fleet of isolated Firecracker microVMs reached over plain SSH — your key is your identity, the username is the box spec — with a built-in MCP control plane for AIs.">
+<meta name="theme-color" content="#08070d">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#070b0a">
-<meta name="description" content="Instant Linux VMs over plain SSH. No signup, nothing to install — your key is your identity. For humans and AIs. ssh hello@box.hopbox.dev">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hopbox.dev/">
-<meta property="og:title" content="hopbox — hop into a box">
-<meta property="og:description" content="Instant Linux VMs over plain SSH. No signup, nothing to install. For humans and AIs.">
+<meta property="og:title" content="Hopbox — compute boxes over SSH, for humans and AIs">
+<meta property="og:description" content="ssh box@box.hopbox.dev spawns a Firecracker microVM the moment you connect — your key is your identity, no signup. Open source, self-hosted, with a built-in MCP control plane for AIs.">
 <meta property="og:image" content="https://hopbox.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="hopbox — hop into a box">
-<meta name="twitter:description" content="Instant Linux VMs over plain SSH. No signup, nothing to install. For humans and AIs.">
+<meta name="twitter:title" content="Hopbox — compute boxes over SSH, for humans and AIs">
+<meta name="twitter:description" content="ssh box@box.hopbox.dev spawns a Firecracker microVM the moment you connect — your key is your identity, no signup. Open source, self-hosted, MCP built in.">
 <meta name="twitter:image" content="https://hopbox.dev/og.png">
 <style>
-  :root{
-    /* night-pond ground: near-black with a green-teal bias (chosen, not grey) */
-    --bg:#070b0a; --bg2:#0a100e; --panel:#0d1512; --panel2:#101a16;
-    --line:rgba(120,220,170,.12); --line2:rgba(120,220,170,.06);
-    --ink:#eafff4; --ink2:#bfe8d4; --muted:#7fa392; --faint:#5a7768;
-    /* brand purple = tech/glow ; frog green = life. two accents, clear roles */
-    --hop:#8b5cff; --hop2:#b48bff; --hop-soft:rgba(139,92,255,.18);
-    --frog:#4fd48a; --frog2:#7ff0ae; --frog-deep:#2ea86a;
-    --lily:#173a2a;
-    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,"Cascadia Code",monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
-  }
+  :root{ --bg:#08070d; --panel:#0f0e17; --line:rgba(255,255,255,.08); --ink:#f4f2fb; --muted:#a09bb5; --accent:#8b5cff; --accent2:#c08bff; --green:#3ddc84; }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
   a{color:inherit;text-decoration:none}
-
-  /* ambient pond glow */
   .bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .glow{position:absolute;border-radius:50%;filter:blur(150px)}
-  .g1{width:640px;height:640px;top:-22%;left:50%;transform:translateX(-40%);background:rgba(139,92,255,.20)}
-  .g2{width:520px;height:520px;bottom:-24%;left:-10%;background:rgba(79,212,138,.12)}
-  .g3{width:440px;height:440px;top:38%;right:-14%;background:rgba(139,92,255,.10)}
-  .ripple{position:absolute;inset:0;
-    background-image:radial-gradient(circle 1.5px at 50% 50%,rgba(120,220,170,.5) 1px,transparent 1.5px);
-    background-size:34px 34px;
-    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 8%,#000,transparent 72%);
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 8%,#000,transparent 72%);opacity:.10}
-
-  .wrap{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 26px}
-
+  .glow{position:absolute;border-radius:50%;filter:blur(140px)}
+  .g1{width:680px;height:680px;top:-25%;right:-8%;background:rgba(139,92,255,.20)}
+  .g2{width:520px;height:520px;bottom:-20%;left:-10%;background:rgba(192,139,255,.12)}
+  .grid{position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(28.6deg,var(--line) 0 1px,transparent 1px 9.9px),
+      repeating-linear-gradient(-28.6deg,var(--line) 0 1px,transparent 1px 9.9px);
+    -webkit-mask-image:radial-gradient(ellipse 85% 55% at 50% 0,#000,transparent 78%);
+    mask-image:radial-gradient(ellipse 85% 55% at 50% 0,#000,transparent 78%);opacity:.55}
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
   /* header */
   header{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
-  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.03em}
-  .brand .mk{width:34px;height:34px;flex:none}
-  .nav{display:flex;gap:4px;align-items:center}
-  .nav a{color:var(--muted);font:600 14px/1 var(--sans);padding:10px 14px;border-radius:10px}
-  .nav a:hover{color:var(--ink);background:rgba(120,220,170,.06)}
-  .nav .prim{color:#0a120e;background:linear-gradient(120deg,var(--frog),var(--frog2));font-weight:700}
-  .nav .prim:hover{filter:brightness(1.06);background:linear-gradient(120deg,var(--frog),var(--frog2))}
-  @media(max-width:640px){.nav .hide{display:none}}
-
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:19px;letter-spacing:-.02em}
+  .brand img{width:30px;height:30px}
+  .nav{display:flex;gap:6px;align-items:center}
+  .nav a{color:var(--muted);font-size:14.5px;font-weight:500;padding:9px 14px;border-radius:9px}
+  .nav a:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+  .nav .ghub{border:1px solid var(--line);border-radius:9px}
+  @media(max-width:720px){.nav .hide{display:none}}
   /* hero */
-  .hero{display:grid;grid-template-columns:1.08fr .92fr;gap:44px;align-items:center;padding:40px 0 30px}
-  .hero>*{min-width:0}
-  @media(max-width:880px){.hero{grid-template-columns:1fr;gap:26px;padding:26px 0 6px;text-align:center}.hero .stage{order:-1}}
-  .badge{display:inline-flex;align-items:center;gap:9px;font:600 12.5px/1 var(--mono);color:var(--ink2);border:1px solid var(--line);padding:7px 13px;border-radius:999px;background:rgba(120,220,170,.03)}
-  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--frog);box-shadow:0 0 12px var(--frog)}
-  .badge .dot{animation:pulse 2s ease-in-out infinite}
-  h1{font-size:clamp(44px,7vw,78px);line-height:.94;letter-spacing:-.05em;font-weight:850;margin:20px 0 0}
-  h1 .g{background:linear-gradient(115deg,var(--frog2),var(--hop2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{margin-top:22px;font-size:clamp(16.5px,2.2vw,19.5px);color:var(--ink2);max-width:33ch}
-  @media(max-width:880px){.sub{margin-inline:auto}}
-  .sub b{color:var(--ink);font-weight:650}
-  .cmd{margin-top:28px;display:flex;align-items:center;gap:10px;background:#060a08;border:1px solid var(--line);border-radius:13px;padding:12px 12px 12px 16px;max-width:440px;box-shadow:0 24px 60px rgba(0,0,0,.5)}
-  @media(max-width:880px){.cmd{margin-inline:auto}}
-  .cmd code{flex:1;min-width:0;font:14px/1.4 var(--mono);color:#daffe9;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
-  .cmd code::-webkit-scrollbar{display:none}
-  .cmd code b{color:var(--frog2);font-weight:600}
-  .cmd .cp{flex:none;width:36px;height:36px;display:grid;place-items:center;color:#0a120e;background:linear-gradient(120deg,var(--frog),var(--frog2));border:none;border-radius:9px;cursor:pointer;font-size:15px}
-  .cmd .cp:hover{filter:brightness(1.08)}
-  .cta{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap}
-  @media(max-width:880px){.cta{justify-content:center}}
-  .btn{font:700 15px/1 var(--sans);padding:14px 22px;border-radius:12px;display:inline-flex;align-items:center;gap:8px}
-  .btn-p{color:#12091f;background:linear-gradient(120deg,var(--hop),var(--hop2));box-shadow:0 10px 34px var(--hop-soft)}
+  .herowrap{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;padding:48px 0 26px}
+  .herowrap>*{min-width:0}
+  @media(max-width:900px){.herowrap{grid-template-columns:1fr;gap:30px;padding:34px 0 10px}}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);border:1px solid var(--line);padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.02)}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+  h1{font-size:clamp(38px,5vw,58px);line-height:1.04;letter-spacing:-.04em;font-weight:800;margin:22px 0 0}
+  h1 .grad{background:linear-gradient(110deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin-top:24px;font-size:clamp(17px,2.3vw,20px);color:var(--muted);max-width:600px}
+  .herocmd{margin-top:30px;display:flex;align-items:center;gap:10px;background:#0b0a12;border:1px solid var(--line);border-radius:12px;padding:11px 11px 11px 16px;width:100%;max-width:560px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .herocmd code{flex:1;min-width:0;font:13.5px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#d8d3ea;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+  .herocmd code::-webkit-scrollbar{display:none}
+  .herocmd code::before{content:"$ ";color:var(--accent2)}
+  .copy{flex:none;width:36px;height:36px;display:grid;place-items:center;padding:0;color:#15121d;background:linear-gradient(110deg,var(--accent),var(--accent2));border:none;border-radius:9px;cursor:pointer}
+  .copy:hover{filter:brightness(1.08)}
+  .copy .i-ok{display:none}
+  .copy.ok .i-copy{display:none}
+  .copy.ok .i-ok{display:block}
+  .herohint{margin-top:14px;font-size:13.5px;color:var(--muted)}
+  .herohint a{color:var(--accent2)}
+  .cta{margin-top:30px;display:flex;gap:13px;flex-wrap:wrap}
+  .btn{font-weight:600;font-size:15px;padding:13px 22px;border-radius:12px;display:inline-flex;align-items:center;gap:8px}
+  .btn-p{background:linear-gradient(110deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 30px rgba(139,92,255,.35)}
   .btn-p:hover{filter:brightness(1.08)}
   .btn-g{border:1px solid var(--line);color:var(--ink)}
-  .btn-g:hover{background:rgba(120,220,170,.06)}
-
-  /* the frog stage */
-  .stage{position:relative;display:grid;place-items:center;padding:10px}
-  .stage .halo{position:absolute;width:78%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--hop-soft),transparent 65%);filter:blur(20px)}
-  .frog{width:min(340px,74vw);height:auto;position:relative;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5)) drop-shadow(0 0 30px rgba(139,92,255,.25));animation:breathe 5.5s ease-in-out infinite}
-  .lid{transform-box:fill-box;transform-origin:center bottom;transform:scaleY(0);animation:blink 5.2s ease-in-out infinite}
-  .lid.r{animation-delay:.06s}
-  @keyframes blink{0%,92%,100%{transform:scaleY(0)}95%,97%{transform:scaleY(1)}}
-  @keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-6px) scale(1.015)}}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-
+  .btn-g:hover{background:rgba(255,255,255,.05)}
+  /* terminal */
+  .term{margin:0;border:1px solid var(--line);border-radius:16px;background:#0b0a12;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .term .bar{display:flex;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line)}
+  .term .bar i{width:11px;height:11px;border-radius:50%;background:#2a2735}
+  .term pre{margin:0;padding:20px 22px;font:13.5px/1.85 ui-monospace,SFMono-Regular,Menlo,monospace;color:#d8d3ea;min-height:230px;overflow-x:auto}
+  .term .c{color:#6f6a85}.term .p{color:var(--accent2)}.term .o{color:#9be6b4}
+  .term .line{display:block;opacity:0;animation:show .25s forwards}
+  .l1{animation-delay:.3s}.l2{animation-delay:1.0s}.l3{animation-delay:1.7s}.l4{animation-delay:2.4s}.l5{animation-delay:3.1s}.l6{animation-delay:3.8s}.l7{animation-delay:4.5s}
+  .cursor{display:inline-block;width:8px;height:16px;background:var(--accent2);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes show{to{opacity:1}}@keyframes blink{50%{opacity:0}}
   /* section scaffolding */
-  section{position:relative;z-index:1}
-  .band{max-width:1140px;margin:0 auto;padding:64px 26px}
-  .eyebrow{font:700 12px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--frog)}
-  h2{font-size:clamp(26px,4vw,40px);line-height:1.05;letter-spacing:-.03em;font-weight:800;margin:12px 0 0;max-width:20ch}
-  .lead{margin-top:14px;color:var(--muted);font-size:17px;max-width:60ch}
-
-  /* proof terminal */
-  .proof{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
-  @media(max-width:820px){.proof{grid-template-columns:1fr;gap:24px}}
-  .term{border:1px solid var(--line);border-radius:15px;background:#060a08;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-  .term .bar{display:flex;gap:7px;padding:12px 15px;border-bottom:1px solid var(--line2)}
-  .term .bar i{width:11px;height:11px;border-radius:50%;background:#233029}
-  .term pre{margin:0;padding:18px 20px;font:13.5px/1.9 var(--mono);color:#daffe9;overflow-x:auto}
-  .term .c{color:var(--faint)} .term .p{color:var(--hop2)} .term .o{color:var(--frog2)} .term .d{color:var(--muted)}
-
-  /* pillars */
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
-  @media(max-width:820px){.cards{grid-template-columns:1fr}}
-  .card{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--bg2));padding:22px}
-  .card .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(139,92,255,.12);border:1px solid var(--line);font-size:22px}
-  .card h3{margin-top:16px;font-size:18.5px;font-weight:750;letter-spacing:-.02em}
-  .card p{margin-top:8px;color:var(--muted);font-size:14.5px;line-height:1.6}
-  .card p b{color:var(--ink2);font-weight:600}
-  .card code{font:12.5px var(--mono);color:var(--frog2);background:rgba(79,212,138,.08);padding:1px 5px;border-radius:5px}
-
-  /* AI pond */
-  .pond{border:1px solid var(--line);border-radius:22px;background:
-      radial-gradient(ellipse 70% 100% at 50% 0,rgba(139,92,255,.12),transparent 60%),
-      linear-gradient(180deg,var(--panel2),var(--bg2));padding:44px 30px;text-align:center;overflow:hidden}
-  .lilies{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
-  .pad{width:186px;border:1px solid var(--line);border-radius:14px;background:#070c0a;padding:14px;text-align:left}
-  .pad .top{display:flex;align-items:center;gap:8px}
-  .pad .nm{font:650 13px var(--mono);color:var(--ink)}
-  .pad .chip{margin-left:auto;font:700 8.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:5px}
-  .pad .chip.w{background:rgba(231,165,60,.16);color:#e7a53c}
-  .pad .chip.d{background:rgba(79,212,138,.16);color:var(--frog)}
-  .pad .chip.a{background:rgba(216,27,106,.18);color:#ff5c96}
-  .pad .t{margin-top:9px;font:500 12px/1.5 var(--sans);color:var(--muted)}
-  .dotp{width:6px;height:6px;border-radius:50%;background:currentColor}
-  .dotp.live{animation:pulse 1.5s ease-in-out infinite}
-
-  /* how it works */
-  .hops{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px;counter-reset:h}
-  @media(max-width:820px){.hops{grid-template-columns:1fr}}
-  .hop{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:22px;position:relative}
-  .hop::before{counter-increment:h;content:counter(h);position:absolute;top:18px;right:20px;font:800 32px/1 var(--mono);color:rgba(139,92,255,.28)}
-  .hop .k{font:700 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--frog)}
-  .hop h4{margin-top:10px;font-size:17px;font-weight:750}
-  .hop p{margin-top:7px;color:var(--muted);font-size:14px;line-height:1.6}
-  .hop code{font:12.5px var(--mono);color:var(--frog2)}
-
-  /* closing */
-  .final{text-align:center;padding:80px 26px 30px}
-  .final .frogmini{width:96px;margin:0 auto 8px}
-  .final h2{margin-inline:auto}
-  .final .cta{justify-content:center;margin-top:26px}
-  footer{border-top:1px solid var(--line2);margin-top:40px}
-  .foot{max-width:1140px;margin:0 auto;padding:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--faint);font:500 13px var(--mono)}
-  .foot a{color:var(--muted)} .foot a:hover{color:var(--ink)}
-  .foot .lk{display:flex;gap:18px;flex-wrap:wrap}
-
-  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+  .sec{padding:54px 0}
+  .eyebrow{font:600 12.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2)}
+  .sec h2{font-size:clamp(27px,3.6vw,38px);letter-spacing:-.03em;font-weight:800;margin-top:12px}
+  .sec .lead{margin-top:14px;font-size:17px;color:var(--muted);max-width:680px}
+  /* two layers */
+  .layers{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+  @media(max-width:820px){.layers{grid-template-columns:1fr}}
+  .layer{position:relative;padding:28px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);overflow:hidden}
+  .layer.boxd{border-color:rgba(139,92,255,.32);box-shadow:0 0 60px rgba(139,92,255,.10) inset}
+  .layer .tag{display:inline-flex;align-items:center;gap:7px;font:600 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.04em;color:var(--accent2);background:rgba(139,92,255,.12);border:1px solid rgba(139,92,255,.22);padding:6px 10px;border-radius:999px}
+  .layer h3{font-size:21px;letter-spacing:-.02em;margin-top:16px}
+  .layer .role{color:var(--muted);font-size:13.5px;margin-top:3px}
+  .layer p{color:var(--muted);font-size:14.5px;margin-top:14px;line-height:1.6}
+  .layer ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:9px}
+  .layer li{position:relative;padding-left:24px;font-size:14px;color:#cfcadf}
+  .layer li::before{content:"";position:absolute;left:2px;top:7px;width:7px;height:7px;border-radius:2px;transform:rotate(45deg);background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .layer li b{color:var(--ink);font-weight:600}
+  .layer .lcmd{margin-top:18px;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d3ea;background:#0b0a12;border:1px solid var(--line);padding:11px 13px;border-radius:10px;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+  .layer .lcmd::-webkit-scrollbar{display:none}
+  .layer .lcmd::before{content:"$ ";color:var(--accent2)}
+  .stackline{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px;color:var(--muted);font-size:13.5px}
+  .stackline b{color:var(--ink);font-weight:600}
+  .stackline .sep{color:var(--accent2)}
+  /* features */
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px;margin-top:34px}
+  .card{padding:22px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent)}
+  .card .k{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(139,92,255,.14);color:var(--accent2);font-size:17px;margin-bottom:13px}
+  .card h3{font-size:15.5px;letter-spacing:-.01em}
+  .card p{font-size:14px;color:var(--muted);margin-top:7px;line-height:1.55}
+  .card code{font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:#d8d3ea;background:#0b0a12;border:1px solid var(--line);padding:1px 6px;border-radius:6px}
+  /* self-host */
+  .install{margin-top:34px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.install{grid-template-columns:1fr}}
+  .install .ihead{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .install h3{font-size:18px;letter-spacing:-.02em}
+  .install .ihead p{color:var(--muted);font-size:14px}
+  .ibox{border:1px solid var(--line);border-radius:13px;background:#0b0a12;padding:16px 16px 14px}
+  .ibox .lbl{font-size:12.5px;color:var(--muted);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+  .ibox .lbl .pill{font:600 10.5px/1 ui-monospace,Menlo,monospace;letter-spacing:.04em;color:var(--accent2);background:rgba(139,92,255,.12);border:1px solid rgba(139,92,255,.22);padding:4px 7px;border-radius:6px}
+  .cmdrow{display:flex;align-items:center;gap:10px}
+  .cmdrow code{flex:1;min-width:0;font:12.5px/1.5 ui-monospace,Menlo,monospace;color:#d8d3ea;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+  .cmdrow code::-webkit-scrollbar{display:none}
+  .cmdrow code::before{content:"$ ";color:var(--accent2)}
+  .ibox .note{font-size:12.5px;color:var(--muted);margin-top:11px}
+  .ibox .note a{color:var(--accent2)}
+  /* footer */
+  footer{border-top:1px solid var(--line);margin-top:54px;padding:30px 0;color:var(--muted);font-size:13.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer a:hover{color:var(--ink)}
+  footer .fl{display:flex;gap:18px;flex-wrap:wrap}
+  @media(max-width:600px){
+    .wrap{padding:0 18px}
+    header{padding:16px 0}
+    .brand{font-size:17px}
+    .nav a{padding:8px 9px;font-size:13px}
+    h1{font-size:36px}
+    .sub{font-size:16px}
+    .herowrap{padding:20px 0 4px}
+    .herocmd{max-width:none}
+    .cta{margin-top:24px}
+    .sec{padding:40px 0}
+    .term pre{font-size:12px;line-height:1.8;padding:16px 16px;min-height:auto}
+    .layer{padding:22px}
+    footer{flex-direction:column;gap:14px;text-align:center;align-items:center}
+  }
 </style>
 </head>
 <body>
-
-<div class="bg"><div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div><div class="ripple"></div></div>
-
-<!-- the frog mascot, reused -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="frog" viewBox="0 0 220 200">
-  <defs>
-    <radialGradient id="body" cx="50%" cy="38%" r="75%">
-      <stop offset="0%" stop-color="#7ff0ae"/><stop offset="60%" stop-color="#4fd48a"/><stop offset="100%" stop-color="#2ea86a"/>
-    </radialGradient>
-    <linearGradient id="belly" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#cffbe4"/><stop offset="100%" stop-color="#8ff0bf"/>
-    </linearGradient>
-  </defs>
-  <!-- the box it sits on -->
-  <g>
-    <rect x="46" y="150" width="128" height="34" rx="9" fill="#101a16" stroke="#8b5cff" stroke-opacity=".5"/>
-    <circle cx="60" cy="167" r="3" fill="#4fd48a"/><circle cx="72" cy="167" r="3" fill="#b48bff"/>
-    <rect x="86" y="164" width="74" height="6" rx="3" fill="#1c2c25"/>
-  </g>
-  <!-- back legs -->
-  <ellipse cx="52" cy="150" rx="24" ry="16" fill="#2ea86a"/>
-  <ellipse cx="168" cy="150" rx="24" ry="16" fill="#2ea86a"/>
-  <!-- body -->
-  <ellipse cx="110" cy="118" rx="66" ry="52" fill="url(#body)"/>
-  <!-- belly -->
-  <ellipse cx="110" cy="132" rx="38" ry="32" fill="url(#belly)" opacity=".9"/>
-  <!-- front feet -->
-  <g fill="#3ec483">
-    <ellipse cx="82" cy="166" rx="17" ry="8"/><ellipse cx="138" cy="166" rx="17" ry="8"/>
-    <circle cx="70" cy="166" r="4"/><circle cx="80" cy="169" r="4"/><circle cx="90" cy="166" r="4"/>
-    <circle cx="130" cy="166" r="4"/><circle cx="140" cy="169" r="4"/><circle cx="150" cy="166" r="4"/>
-  </g>
-  <!-- eye bulges -->
-  <circle cx="80" cy="60" r="28" fill="url(#body)"/>
-  <circle cx="140" cy="60" r="28" fill="url(#body)"/>
-  <!-- eyes -->
-  <circle cx="80" cy="58" r="18" fill="#fbfff7"/>
-  <circle cx="140" cy="58" r="18" fill="#fbfff7"/>
-  <circle cx="84" cy="61" r="8.5" fill="#16241d"/>
-  <circle cx="136" cy="61" r="8.5" fill="#16241d"/>
-  <circle cx="80" cy="55" r="3" fill="#fff"/><circle cx="132" cy="55" r="3" fill="#fff"/>
-  <!-- eyelids (blink) -->
-  <path class="lid l" d="M62 58 a18 18 0 0 1 36 0 z" fill="#3ec483"/>
-  <path class="lid r" d="M122 58 a18 18 0 0 1 36 0 z" fill="#3ec483"/>
-  <!-- nostrils -->
-  <circle cx="102" cy="92" r="2.4" fill="#1f7a4e"/><circle cx="118" cy="92" r="2.4" fill="#1f7a4e"/>
-  <!-- smile -->
-  <path d="M74 104 Q110 138 146 104" fill="none" stroke="#1f7a4e" stroke-width="4.5" stroke-linecap="round"/>
-  <!-- cheeks -->
-  <circle cx="70" cy="112" r="7" fill="#ff9ec4" opacity=".45"/>
-  <circle cx="150" cy="112" r="7" fill="#ff9ec4" opacity=".45"/>
-</symbol></svg>
-
+<div class="bg"><div class="grid"></div><div class="glow g1"></div><div class="glow g2"></div></div>
 <div class="wrap">
   <header>
-    <div class="brand"><svg class="mk" viewBox="0 0 220 200"><use href="#frog"/></svg>hopbox</div>
+    <div class="brand"><img src="logo.svg" alt=""><span>Hopbox</span></div>
     <nav class="nav">
-      <a class="hide" href="https://docs.hopbox.dev">Docs</a>
-      <a class="hide" href="https://box.hopbox.dev/app/">Console</a>
-      <a class="prim" href="https://docs.hopbox.dev/guide/quickstart">Get started</a>
+      <a class="hide" href="#boxes">Boxes</a>
+      <a class="hide" href="#ai">AI control</a>
+      <a href="https://docs.hopbox.dev">Docs</a>
+      <a class="ghub" href="https://github.com/hopboxdev/hopbox">★ GitHub</a>
     </nav>
   </header>
 
+  <div class="herowrap">
   <section class="hero">
-    <div>
-      <span class="badge"><span class="dot"></span>live at box.hopbox.dev</span>
-      <h1>Hop into<br>a <span class="g">box.</span></h1>
-      <p class="sub">Instant Linux VMs over plain SSH. No signup, nothing to install — <b>your key is your identity</b>. For humans and AIs.</p>
-      <div class="cmd">
-        <code><b>ssh</b> hello@box.hopbox.dev</code>
-        <button class="cp" title="copy">⧉</button>
-      </div>
-      <div class="cta">
-        <a class="btn btn-p" href="https://docs.hopbox.dev/guide/quickstart">Get started →</a>
-        <a class="btn btn-g" href="https://docs.hopbox.dev">Read the docs</a>
-      </div>
+    <span class="badge"><span class="dot"></span> Open source · self-hosted · Firecracker microVMs</span>
+    <h1>Compute boxes<br><span class="grad">over SSH.</span></h1>
+    <p class="sub">One <code style="font-family:ui-monospace,Menlo,monospace">ssh</code> command spins up a real Linux microVM — hardware-isolated, sub-second boot, your key as identity. One daemon, a fleet of isolated boxes — shared by humans and AIs.</p>
+    <div class="herocmd">
+      <code id="cmd">ssh box@box.hopbox.dev</code>
+      <button class="copy" aria-label="Copy SSH command" onclick="navigator.clipboard.writeText(document.getElementById('cmd').textContent);this.classList.add('ok');setTimeout(()=>this.classList.remove('ok'),1600)">
+        <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <svg class="i-ok" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 6"/></svg>
+      </button>
     </div>
-    <div class="stage">
-      <div class="halo"></div>
-      <svg class="frog" viewBox="0 0 220 200"><use href="#frog"/></svg>
+    <p class="herohint">It's live — that command drops you into a fresh microVM on our public host. No signup.</p>
+    <div class="cta">
+      <a class="btn btn-p" href="https://docs.hopbox.dev">Read the docs</a>
+      <a class="btn btn-g" href="https://github.com/hopboxdev/hopbox">★ Star on GitHub</a>
     </div>
   </section>
+
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <pre><span class="line l1"><span class="c"># your SSH key is your identity — no signup, no console</span></span><span class="line l2">$ ssh myproject@box.hopbox.dev</span><span class="line l3"><span class="o">⟳ booting microVM · ubuntu · 0.4s</span></span><span class="line l4">root@myproject:~# uname -r</span><span class="line l5"><span class="o">6.1.0-hopbox  (a real kernel, hardware-isolated)</span></span><span class="line l6">root@myproject:~# <span class="c"># idle → suspends to disk, wakes from snapshot</span></span><span class="line l7">root@myproject:~# <span class="cursor"></span></span></pre>
+  </div>
+  </div>
+
+  <!-- ONE ENGINE, TWO KINDS OF ACTOR -->
+  <section class="sec" id="what">
+    <span class="eyebrow">One engine, two kinds of actor</span>
+    <h2>Boxes for humans. The same fleet for AIs.</h2>
+    <p class="lead">Hopbox is open source and self-hosted, top to bottom. One daemon — <b style="color:var(--ink)">hopboxd</b> — turns a host into a fleet of isolated boxes. Humans reach them over plain SSH; AIs drive the same fleet over a built-in <b style="color:var(--ink)">MCP control plane</b>.</p>
+
+    <div class="layers">
+      <div class="layer boxd" id="boxes">
+        <span class="tag">● boxes — over SSH</span>
+        <h3>Compute boxes over SSH</h3>
+        <div class="role">A Firecracker microVM the moment you connect.</div>
+        <p>Point SSH at a hopbox host and a microVM boots on connect: a real Linux kernel, hardware-isolated, sub-second cold start. Your SSH key is the only credential — the username is the box spec.</p>
+        <ul>
+          <li><b>Durable disk</b> — survives suspend/resume, restart and host reboot.</li>
+          <li><b>Auto-suspend</b> to disk when idle; your next connection resumes it, processes and TCP intact.</li>
+          <li><b>Images &amp; flavors</b> — <code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">name:python:big@host</code>; <code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">ssh images@host</code> lists the catalog.</li>
+          <li><b>Persistent homes</b> that outlive the box, <b>snapshots</b> — capture, fork, restore.</li>
+          <li><b>Detached jobs</b> — <code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">box-guest run</code> keeps a box alive until the work is done.</li>
+          <li><b>Zero-install management</b> — <code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">ssh cli@host</code>: ls, snapshot, clone, account. Verify with GitHub for the durable tier.</li>
+        </ul>
+        <div class="lcmd">ssh myproject@box.hopbox.dev</div>
+      </div>
+
+      <div class="layer" id="ai">
+        <span class="tag">◆ AI-control plane — MCP</span>
+        <h3>An AI drives the same fleet</h3>
+        <div class="role">Built into the daemon, not bolted on.</div>
+        <p>Any MCP client gets the whole plane: live fleet state pushed as it changes, declarative task delegation, and interactive canvases a human drives while the AI watches — real boxes, not a simulation.</p>
+        <ul>
+          <li><b><code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">hopbox://fleet</code></b> — every box, live; subscribe and react, never poll.</li>
+          <li><b><code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">box.delegate</code> / <code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">fleet.apply</code></b> — spawn boxes and run tasks, declaratively.</li>
+          <li><b>The canvas loop</b> — the AI renders a UI, the human clicks, interactions are pushed back.</li>
+          <li><b>Self-describing images</b> — every image ships a SKILL.md an agent can read.</li>
+          <li><b><code style="font-family:ui-monospace,Menlo,monospace;color:#d8d3ea">box-guest mcp</code></b> — an in-box MCP server, so an agent manages its own sandbox.</li>
+          <li><b>Taught on connect</b> — the server's MCP instructions explain the whole plane to any client.</li>
+        </ul>
+        <div class="lcmd">hopbox-mcp ps --connect unix:/run/hopboxd-mcp.sock</div>
+      </div>
+    </div>
+    <div class="stackline"><b>ssh</b> for humans <span class="sep">·</span> <b>MCP</b> for AIs <span class="sep">·</span> one engine underneath</div>
+  </section>
+
+  <!-- WHY -->
+  <section class="sec">
+    <span class="eyebrow">Why boxes over SSH</span>
+    <h2>Real isolation. Zero ceremony.</h2>
+    <p class="lead">SSH is the entire interface. The username carries the spec, your key carries the identity — and a hardware-isolated VM does the rest.</p>
+    <div class="feat">
+      <div class="card"><div class="k">❯</div><h3>One command, a whole VM</h3><p><code>ssh name@host</code> and you're root in a fresh microVM. No signup, no cloud console, no provisioning step.</p></div>
+      <div class="card"><div class="k">⚡</div><h3>Sub-second boot</h3><p>Firecracker cold-starts in a fraction of a second. Idle boxes suspend to a snapshot and resume on reconnect — processes and open sockets intact.</p></div>
+      <div class="card"><div class="k">🔒</div><h3>Hardware isolation</h3><p>Each box is its own KVM guest with a real kernel — not a shared-kernel container. Network-isolated with an egress firewall by default.</p></div>
+      <div class="card"><div class="k">💾</div><h3>Durable, not disposable</h3><p>Disk survives suspend, restart and host reboots; named boxes get a persistent home. Verify with GitHub and your boxes are never reaped.</p></div>
+      <div class="card"><div class="k">📦</div><h3>Image catalog</h3><p><code>ssh images@host</code> lists them; <code>ssh name:debian-12@host</code> picks one — pre-tooled with git, vim and the basics.</p></div>
+      <div class="card"><div class="k">🤖</div><h3>Agent-ready</h3><p><code>box-guest</code> ships an in-box CLI and MCP server, so an AI agent inside a box can manage its own sandbox.</p></div>
+    </div>
+  </section>
+
+  <!-- SELF-HOST -->
+  <section class="sec" id="self-host">
+    <span class="eyebrow">Try it · self-host</span>
+    <h2>Run it now, or run it yourself.</h2>
+    <p class="lead">The public host is one SSH command away. When you want your own, it's a single installer — docker-backed in one command, or a complete microVM host with the zero-touch provisioner.</p>
+    <div class="install">
+      <div class="ihead">
+        <h3>Get started</h3>
+        <p>Everything is open source under <a href="https://github.com/hopboxdev/hopbox" style="color:var(--accent2)">hopboxdev/hopbox</a>.</p>
+      </div>
+      <div class="ibox">
+        <div class="lbl"><span class="pill">try it</span> Drop into a box on our host</div>
+        <div class="cmdrow">
+          <code id="c1">ssh box@box.hopbox.dev</code>
+          <button class="copy" aria-label="Copy" onclick="navigator.clipboard.writeText(document.getElementById('c1').textContent);this.classList.add('ok');setTimeout(()=>this.classList.remove('ok'),1600)">
+            <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            <svg class="i-ok" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 6"/></svg>
+          </button>
+        </div>
+        <p class="note">No account. Name the box anything; your key owns it.</p>
+      </div>
+      <div class="ibox">
+        <div class="lbl"><span class="pill">self-host</span> Install hopbox on your own host</div>
+        <div class="cmdrow">
+          <code id="c2">curl -fsSL https://raw.githubusercontent.com/hopboxdev/hopbox/main/deploy/install-hopbox.sh | sudo sh</code>
+          <button class="copy" aria-label="Copy" onclick="navigator.clipboard.writeText(document.getElementById('c2').textContent);this.classList.add('ok');setTimeout(()=>this.classList.remove('ok'),1600)">
+            <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            <svg class="i-ok" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 6"/></svg>
+          </button>
+        </div>
+        <p class="note">Want a full Firecracker microVM host? <a href="https://docs.hopbox.dev/guide/deploy">One-command provisioner →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© Hopbox · open source &amp; self-hosted</span>
+    <span class="fl">
+      <a href="https://docs.hopbox.dev">Docs</a>
+      <a href="https://github.com/hopboxdev/hopbox">GitHub</a>
+      <a href="https://github.com/hopboxdev/hopbox/releases">Releases</a>
+      <a href="ssh://box@box.hopbox.dev">box.hopbox.dev</a>
+    </span>
+  </footer>
 </div>
-
-<!-- proof -->
-<section class="band">
-  <div class="proof">
-    <div>
-      <span class="eyebrow">one command</span>
-      <h2>SSH to a name. Get a whole machine.</h2>
-      <p class="lead">Any name you connect to becomes a Firecracker microVM. Root, isolated, ready in seconds. Leave and it suspends; come back and your files are still there.</p>
-    </div>
-    <div class="term">
-      <div class="bar"><i></i><i></i><i></i></div>
-<pre><span class="p">~ $</span> ssh myproject@box.hopbox.dev
-<span class="c"># a microVM spins up the moment you connect…</span>
-<span class="p">root@myproject:~#</span> uname -a
-<span class="o">Linux myproject 6.1.0 #1 SMP x86_64 GNU/Linux</span>
-<span class="p">root@myproject:~#</span> whoami
-<span class="o">root</span>
-<span class="c"># disconnect → it suspends. reconnect → right where you left off.</span>
-<span class="p">root@myproject:~#</span> <span class="d">_</span></pre>
-    </div>
-  </div>
-</section>
-
-<!-- pillars -->
-<section class="band" style="padding-top:20px">
-  <span class="eyebrow">why hopbox</span>
-  <h2>What you get.</h2>
-  <div class="cards">
-    <div class="card">
-      <div class="ic">⚡</div>
-      <h3>Spawn on connect</h3>
-      <p>SSH to a name, get a VM. Auto-suspends when idle, resumes with your files. <code>scp</code>, <code>sftp</code> and <code>rsync</code> work as-is.</p>
-    </div>
-    <div class="card">
-      <div class="ic">🤖</div>
-      <h3>For humans <i>and</i> AIs</h3>
-      <p>What you drive over SSH, an AI drives over <b>MCP</b>. Hand a task to an agent box: it works in isolation and asks you when unsure.</p>
-    </div>
-    <div class="card">
-      <div class="ic">🐸</div>
-      <h3>Nothing to install</h3>
-      <p>SSH is the client. A <b>browser terminal</b> and a live <b>web console</b> are built in — no agent to deploy, nothing to set up.</p>
-    </div>
-  </div>
-</section>
-
-<!-- AI pond -->
-<section class="band">
-  <div class="pond">
-    <span class="eyebrow">ai-native</span>
-    <h2 style="margin-inline:auto">Run a fleet of agents.</h2>
-    <p class="lead" style="margin-inline:auto">Delegate tasks. Each agent gets its own VM, works in parallel, and asks when it needs you. Watch it live in your browser.</p>
-    <div class="lilies">
-      <div class="pad"><div class="top"><span class="nm">refactor-auth</span><span class="chip w"><span class="dotp live"></span>working</span></div><div class="t">migrating auth to OAuth2</div></div>
-      <div class="pad"><div class="top"><span class="nm">port-cli</span><span class="chip a"><span class="dotp live"></span>needs you</span></div><div class="t">Postgres or MySQL?</div></div>
-      <div class="pad"><div class="top"><span class="nm">add-tests</span><span class="chip d">done</span></div><div class="t">24 tests, all green</div></div>
-    </div>
-    <div class="cta" style="justify-content:center;margin-top:28px"><a class="btn btn-p" href="https://box.hopbox.dev/app/">Open the console →</a></div>
-  </div>
-</section>
-
-<!-- how it works -->
-<section class="band" style="padding-top:20px">
-  <span class="eyebrow">three hops</span>
-  <h2>From zero to running.</h2>
-  <div class="hops">
-    <div class="hop"><div class="k">connect</div><h4>SSH to a box</h4><p><code>ssh dev@box.hopbox.dev</code>. A fresh VM, root, in seconds.</p></div>
-    <div class="hop"><div class="k">work</div><h4>Do anything in it</h4><p>Persistent home. A shared <code>/wrk</code> drive across your boxes. Suspend and resume.</p></div>
-    <div class="hop"><div class="k">delegate</div><h4>Or hand it to an AI</h4><p>Give a task to an agent box. It works, asks if unsure, returns the result, cleans up.</p></div>
-  </div>
-</section>
-
-<!-- closing -->
-<section class="final">
-  <svg class="frogmini" viewBox="0 0 220 200"><use href="#frog"/></svg>
-  <h2>Try it. It takes <span class="g">ten seconds</span>.</h2>
-  <div class="cta">
-    <a class="btn btn-p" href="https://docs.hopbox.dev/guide/quickstart">Get started →</a>
-    <a class="btn btn-g" href="https://box.hopbox.dev/app/">See the console</a>
-  </div>
-</section>
-
-<footer><div class="foot">
-  <span>🐸 hopbox</span>
-  <span class="lk"><a href="https://docs.hopbox.dev">Docs</a><a href="https://box.hopbox.dev/app/">Console</a><a href="https://box.hopbox.dev">box.hopbox.dev</a></span>
-</div></footer>
-
-<script>
-document.querySelector(".cp").addEventListener("click",async function(){
-  const cmd="ssh hello@box.hopbox.dev";
-  try{ await navigator.clipboard.writeText(cmd); }
-  catch(e){
-    const t=document.createElement("textarea"); t.value=cmd; document.body.appendChild(t);
-    t.select(); document.execCommand("copy"); t.remove();
-  }
-  this.textContent="✓"; setTimeout(()=>this.textContent="⧉",1400);
-});
-</script>
 </body>
 </html>
