@@ -15,6 +15,7 @@ knowing (run `box-guest` with no args for the full list):
 - `box-guest skill` — print this guide (with the image's specifics appended below).
 - `box-guest status working "building X"` — report what you're doing; shows in the fleet.
 - `box-guest keep-alive 30m` — hold the box alive for a while (e.g. a long detached job).
+- `box-guest durable on` — persist this box: never idle-reaped (verified accounts only).
 - `box-guest auto-suspend off` — never suspend (verified accounts only).
 - `box-guest idle 15m` — change this box's idle-suspend timeout.
 - `box-guest run <cmd>` — run a command **detached**; the box stays alive until it
@@ -29,9 +30,10 @@ knowing (run `box-guest` with no args for the full list):
 - **Named boxes** (`ssh myproj@host`) **auto-suspend** after ~5m idle: memory is
   snapshotted to disk and compute stops. Your next connection **resumes** it — kernel,
   processes, and open sockets intact. Nothing is lost on disconnect.
-- A box left untouched for a long time is eventually **idle-reaped (deleted)** to bound
-  storage — **unless the owner is a verified account**, whose boxes persist (the durable
-  tier). `keep-alive` and `auto-suspend off` also hold a box against reaping.
+- A box left untouched for ~3h is eventually **idle-reaped (deleted)** to bound storage
+  — **unless it's marked durable** (`box-guest durable on`, verified accounts only),
+  which makes it persist (it still suspends when idle; it's just never deleted).
+  `keep-alive` and `auto-suspend off` also hold a box against reaping.
 - Your **persistent home** (`/home/dev`) survives suspend, resume, reap, and image
   rebuilds — files you keep there outlive the box itself. The rest of the filesystem is
   ephemeral.
