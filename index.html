@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Hopbox — compute boxes over SSH, for humans and AIs</title>
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<meta name="description" content="Hopbox is an open-source, self-hosted compute-box substrate. One daemon turns a host into a fleet of isolated Firecracker microVMs reached over plain SSH — your key is your identity, the username is the box spec — with a built-in MCP control plane for AIs.">
+<meta name="description" content="Hopbox is a self-hosted compute-box substrate. One daemon turns a host into a fleet of isolated Firecracker microVMs reached over plain SSH — your key is your identity, the username is the box spec — with a built-in MCP control plane for AIs.">
 <meta name="theme-color" content="#08070d">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hopbox.dev/">
 <meta property="og:title" content="Hopbox — compute boxes over SSH, for humans and AIs">
-<meta property="og:description" content="ssh box@box.hopbox.dev spawns a Firecracker microVM the moment you connect — your key is your identity, no signup. Open source, self-hosted, with a built-in MCP control plane for AIs.">
+<meta property="og:description" content="ssh box@box.hopbox.dev spawns a Firecracker microVM the moment you connect — your key is your identity, no signup. Self-hosted, with a built-in MCP control plane for AIs.">
 <meta property="og:image" content="https://hopbox.dev/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Hopbox — compute boxes over SSH, for humans and AIs">
-<meta name="twitter:description" content="ssh box@box.hopbox.dev spawns a Firecracker microVM the moment you connect — your key is your identity, no signup. Open source, self-hosted, MCP built in.">
+<meta name="twitter:description" content="ssh box@box.hopbox.dev spawns a Firecracker microVM the moment you connect — your key is your identity, no signup. Self-hosted, MCP built in.">
 <meta name="twitter:image" content="https://hopbox.dev/og.png">
 <style>
   :root{ --bg:#08070d; --panel:#0f0e17; --line:rgba(255,255,255,.08); --ink:#f4f2fb; --muted:#a09bb5; --accent:#8b5cff; --accent2:#c08bff; --green:#3ddc84; }
@@ -156,14 +156,14 @@
     <nav class="nav">
       <a class="hide" href="#boxes">Boxes</a>
       <a class="hide" href="#ai">AI control</a>
-      <a href="https://docs.hopbox.dev">Docs</a>
-      <a class="ghub" href="https://github.com/hopboxdev/hopbox">★ GitHub</a>
+      <a class="hide" href="#self-host">Self-host</a>
+      <a class="ghub" href="https://docs.hopbox.dev">Docs</a>
     </nav>
   </header>
 
   <div class="herowrap">
   <section class="hero">
-    <span class="badge"><span class="dot"></span> Open source · self-hosted · Firecracker microVMs</span>
+    <span class="badge"><span class="dot"></span> Self-hosted · Firecracker microVMs · live now</span>
     <h1>Compute boxes<br><span class="grad">over SSH.</span></h1>
     <p class="sub">One <code style="font-family:ui-monospace,Menlo,monospace">ssh</code> command spins up a real Linux microVM — hardware-isolated, sub-second boot, your key as identity. One daemon, a fleet of isolated boxes — shared by humans and AIs.</p>
     <div class="herocmd">
@@ -176,7 +176,7 @@
     <p class="herohint">It's live — that command drops you into a fresh microVM on our public host. No signup.</p>
     <div class="cta">
       <a class="btn btn-p" href="https://docs.hopbox.dev">Read the docs</a>
-      <a class="btn btn-g" href="https://github.com/hopboxdev/hopbox">★ Star on GitHub</a>
+      <a class="btn btn-g" href="#self-host">Run it yourself</a>
     </div>
   </section>
 
@@ -190,7 +190,7 @@
   <section class="sec" id="what">
     <span class="eyebrow">One engine, two kinds of actor</span>
     <h2>Boxes for humans. The same fleet for AIs.</h2>
-    <p class="lead">Hopbox is open source and self-hosted, top to bottom. One daemon — <b style="color:var(--ink)">hopboxd</b> — turns a host into a fleet of isolated boxes. Humans reach them over plain SSH; AIs drive the same fleet over a built-in <b style="color:var(--ink)">MCP control plane</b>.</p>
+    <p class="lead">Hopbox is self-hosted, top to bottom — your host, your keys, your boxes. One daemon — <b style="color:var(--ink)">hopboxd</b> — turns a host into a fleet of isolated boxes. Humans reach them over plain SSH; AIs drive the same fleet over a built-in <b style="color:var(--ink)">MCP control plane</b>.</p>
 
     <div class="layers">
       <div class="layer boxd" id="boxes">
@@ -251,7 +251,7 @@
     <div class="install">
       <div class="ihead">
         <h3>Get started</h3>
-        <p>Everything is open source under <a href="https://github.com/hopboxdev/hopbox" style="color:var(--accent2)">hopboxdev/hopbox</a>.</p>
+        <p>Runs on your own host — <a href="https://docs.hopbox.dev/guide/deploy" style="color:var(--accent2)">the deploy guide</a> has the details.</p>
       </div>
       <div class="ibox">
         <div class="lbl"><span class="pill">try it</span> Drop into a box on our host</div>
@@ -267,7 +267,7 @@
       <div class="ibox">
         <div class="lbl"><span class="pill">self-host</span> Install hopbox on your own host</div>
         <div class="cmdrow">
-          <code id="c2">curl -fsSL https://raw.githubusercontent.com/hopboxdev/hopbox/main/deploy/install-hopbox.sh | sudo sh</code>
+          <code id="c2">curl -fsSL https://hopbox.dev/install.sh | sudo sh</code>
           <button class="copy" aria-label="Copy" onclick="navigator.clipboard.writeText(document.getElementById('c2').textContent);this.classList.add('ok');setTimeout(()=>this.classList.remove('ok'),1600)">
             <svg class="i-copy" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
             <svg class="i-ok" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M5 12l5 5L20 6"/></svg>
@@ -279,11 +279,10 @@
   </section>
 
   <footer>
-    <span>© Hopbox · open source &amp; self-hosted</span>
+    <span>© Hopbox · self-hosted compute boxes</span>
     <span class="fl">
       <a href="https://docs.hopbox.dev">Docs</a>
-      <a href="https://github.com/hopboxdev/hopbox">GitHub</a>
-      <a href="https://github.com/hopboxdev/hopbox/releases">Releases</a>
+      <a href="https://docs.hopbox.dev/guide/deploy">Self-host</a>
       <a href="ssh://box@box.hopbox.dev">box.hopbox.dev</a>
     </span>
   </footer>
