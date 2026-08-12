@@ -97,10 +97,13 @@ git -C "$SRC" checkout -q "$HOPBOX_REF"; git -C "$SRC" pull -q origin "$HOPBOX_R
 STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 ( cd "$SRC"
+  # -buildvcs=false on the two binaries the images bake: Go stamps the commit into
+  # every binary, which moved the agent's content sha on every commit and made
+  # `hopbox-host status` report `agent: DRIFT` after deploys that never touched it.
   CGO_ENABLED=0 go build -tags "docker firecracker" -o "$STAGE/hopboxd" ./cmd/hopboxd
   CGO_ENABLED=0 go build -o "$STAGE/hopbox-mcp"   ./cmd/hopbox-mcp
-  CGO_ENABLED=0 go build -o "$STAGE/box-guest"    ./cmd/box-guest
-  CGO_ENABLED=0 go build -o "$STAGE/hopbox-agent" ./cmd/hopbox-agent
+  CGO_ENABLED=0 go build -buildvcs=false -o "$STAGE/box-guest"    ./cmd/box-guest
+  CGO_ENABLED=0 go build -buildvcs=false -o "$STAGE/hopbox-agent" ./cmd/hopbox-agent
   CGO_ENABLED=0 go build -o "$STAGE/hopbox-host"  ./cmd/hopbox-host
   # Makes $STAGE a bundle `hopbox-host update --from` accepts. A source build is the
   # `trunk` channel even when $HOPBOX_REF is a tag: compiling a tag on the host is
