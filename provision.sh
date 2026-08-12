@@ -13,7 +13,9 @@
 # deliberately after verifying — move host sshd to another port, then set
 # ssh-addr: ":22" in /etc/hopbox/hopboxd.yaml and restart hopboxd.
 #
-# Env (all optional): HOPBOX_REF (git ref, default main), FC_VERSION, KERNEL_URL,
+# Env (all optional): HOPBOX_REF (git ref, default main), HOPBOX_CHANNEL (trunk|release
+#   — only needed to re-run this on a host currently running the RELEASE artifact,
+#   since building from source here moves it to trunk), FC_VERSION, KERNEL_URL,
 #   GO_VERSION. Daemon settings live in /etc/hopbox/hopboxd.yaml (see
 #   deploy/hopboxd.example.yaml); edit + `systemctl restart hopboxd`.
 set -euo pipefail
@@ -108,7 +110,10 @@ trap 'rm -rf "$STAGE"' EXIT
   # Makes $STAGE a bundle `hopbox-host update --from` accepts. A source build is the
   # `trunk` channel even when $HOPBOX_REF is a tag: compiling a tag on the host is
   # still not the artifact users install, so it must not claim to be one.
-  sh build/release-manifest.sh "$STAGE/hopbox-release.json" "" "$(git rev-parse HEAD)" trunk >/dev/null )
+  sh build/release-manifest.sh "$STAGE/hopbox-release.json" "" "$(git rev-parse HEAD)" trunk >/dev/null
+  # hopbox-backup ships inside the bundle, so the deploy installs the script this
+  # release was built with instead of whatever the host last copied out of $SRC.
+  cp deploy/backup.sh "$STAGE/backup.sh" )
 # hopbox-host is never part of a release swap, so $PREFIX/hopbox-host is a plain file
 # and safe to replace directly — and the deploy below needs this new one (--from).
 install -m0755 "$STAGE/hopbox-host" "$PREFIX/hopbox-host"
@@ -119,7 +124,12 @@ log "6/6 hand off to hopbox-host (config, unit, deploy, catalog, backups)"
 # release symlinks, and calling catalog.sh directly so the drift fingerprint was never
 # recorded. Neither failed loudly. Owning it in one place, next to the code that
 # depends on it, is what stops a third variant of that bug.
-hopbox-host bootstrap --from "$STAGE"
+#
+# HOPBOX_CHANNEL is forwarded, not assumed: this bundle is a source build (`trunk`),
+# so re-running the provisioner on a host that runs the RELEASE artifact would move it
+# off release. hopbox-host refuses that unless it is asked for, and this is how you ask
+# — the same rule, and the same flag, as a plain `hopbox-host update`.
+hopbox-host bootstrap --from "$STAGE" ${HOPBOX_CHANNEL:+--channel "$HOPBOX_CHANNEL"}
 
 sleep 3
 log "hopboxd: $(systemctl is-active hopboxd)"
