@@ -3,23 +3,217 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>hopbox</title>
-<meta name="description" content="hopbox is being rebuilt from scratch.">
-<style>
-:root { color-scheme: light dark; --bg: #f6f7f5; --fg: #1a211b; --muted: #5b665d; }
-@media (prefers-color-scheme: dark) { :root { --bg: #111512; --fg: #e4eae5; --muted: #9aa89c; } }
-html, body { height: 100%; }
-body { margin: 0; padding: 24px; box-sizing: border-box; display: grid; place-items: center; background: var(--bg); color: var(--fg); font: 17px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
-main { max-width: 34rem; }
-h1 { font-size: 2rem; margin: 0 0 .5rem; letter-spacing: -.01em; }
-p { margin: 0 0 .75rem; color: var(--muted); }
-</style>
+<title>hopbox · persistent, hardware-isolated Linux machines</title>
+<meta name="description" content="Persistent, hardware-isolated Linux machines for developers and AI agents. Every machine is its own Firecracker microVM. It keeps its disk, answers on SSH, and gets its own HTTPS URL.">
+<meta name="theme-color" content="#0A0E0B">
+<link rel="canonical" href="https://hopbox.dev/">
+<meta property="og:title" content="hopbox · persistent, hardware-isolated Linux machines">
+<meta property="og:description" content="Persistent, hardware-isolated Linux machines for developers and AI agents. Every machine is its own Firecracker microVM. It keeps its disk, answers on SSH, and gets its own HTTPS URL.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hopbox.dev/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/terminal.js" defer></script>
 </head>
 <body>
+
+<header class="site-header">
+<nav class="nav" aria-label="Main">
+<a class="brand" href="/">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="3" y="9" width="16" height="16" rx="4" fill="#C4F05A"></rect><rect x="12" y="3" width="13" height="13" rx="3.5" fill="none" stroke="#C4F05A" stroke-width="2"></rect></svg>
+hopbox
+</a>
+<a class="nav-link" href="/use-cases/">Use cases</a>
+<a class="nav-link" href="/roadmap/">Roadmap</a>
+<a class="nav-link" href="https://docs.hopbox.dev">Docs</a>
+<a class="btn btn-nav" href="https://dev.hopbox.dev">Try hopbox<span class="preview-tag">PREVIEW</span></a>
+</nav>
+</header>
+
 <main>
-<h1>hopbox</h1>
-<p>hopbox is being rebuilt from scratch.</p>
-<p>The previous version is retired and can no longer be installed.</p>
+
+<section class="hero dots">
+<div class="hero-inner">
+<div class="hero-copy">
+<p class="release-badge rise"><span class="release-dot pulse"></span>v0.1.0 pre-release: phase 1 shipped</p>
+<h1 class="hero-title display rise-2">Persistent, hardware-isolated Linux machines for <span class="accent">developers</span> and <span class="accent">AI agents</span>.</h1>
+<p class="hero-lead rise-3">Every machine is its own Firecracker microVM. It keeps its disk, answers on SSH, and gets its own HTTPS URL. Drive it from your terminal, your code, or your agent.</p>
+<div class="btn-row hero-actions rise-3">
+<a class="btn btn-primary" href="https://dev.hopbox.dev">Try hopbox<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<a class="btn btn-secondary" href="https://docs.hopbox.dev">Read the docs</a>
+</div>
+<p class="hero-note">hopbox is in preview. Machines and their data can be erased at any time before 1.0.</p>
+</div>
+
+<div class="hero-demo">
+<div class="terminal">
+<div class="terminal-bar">
+<span class="terminal-light"></span>
+<span class="terminal-light"></span>
+<span class="terminal-light"></span>
+<span class="terminal-title">~/work</span>
+</div>
+<div class="terminal-screen">
+<div id="terminal-transcript">
+<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span>hopbox new box1</div>
+<div class="terminal-line terminal-out">state   running</div>
+<div class="terminal-line terminal-out">url     https://box1.dev.hopbox.dev (private, port 8000)</div>
+<div class="terminal-line terminal-out">ssh     ssh box1.hop (port 10001)</div>
+<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span>ssh box1.hop</div>
+<div class="terminal-line terminal-out">user@box1:~$ exit</div>
+<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span>hopbox url public box1</div>
+<div class="terminal-line terminal-out">https://box1.dev.hopbox.dev (public, port 8000)</div>
+<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span><span class="caret"></span></div>
+</div>
+</div>
+</div>
+<div class="hop-row" aria-hidden="true">
+<span class="hop-box hop-box-solid"></span>
+<span class="hop-box hop-box-outline"></span>
+<span class="hop-box hop-box-solid"></span>
+<span class="hop-box hop-box-dim"></span>
+<span class="hop-box hop-box-solid"></span>
+<span class="hop-box hop-box-outline"></span>
+<span class="hop-box hop-box-solid"></span>
+<span class="hop-box hop-box-dim"></span>
+<span class="hop-box hop-box-solid"></span>
+<span class="hop-box hop-box-outline"></span>
+<span class="hop-box hop-box-solid"></span>
+<span class="hop-box hop-box-dim"></span>
+</div>
+</div>
+</div>
+</section>
+
+<section class="marquee">
+<div class="marquee-track">
+<span class="marquee-label">in every machine</span><span>Ubuntu 26.04 LTS</span><span>Docker</span><span>Node.js</span><span>Python</span><span>Go</span><span>uv</span><span>GitHub CLI</span><span>ripgrep</span><span>Neovim</span>
+<span class="marquee-label" aria-hidden="true">in every machine</span><span aria-hidden="true">Ubuntu 26.04 LTS</span><span aria-hidden="true">Docker</span><span aria-hidden="true">Node.js</span><span aria-hidden="true">Python</span><span aria-hidden="true">Go</span><span aria-hidden="true">uv</span><span aria-hidden="true">GitHub CLI</span><span aria-hidden="true">ripgrep</span><span aria-hidden="true">Neovim</span>
+</div>
+</section>
+
+<section class="section features">
+<p class="eyebrow">SHIPPED IN v0.1.0</p>
+<h2 class="features-title display">A real computer, one command away. Yours to keep.</h2>
+<div class="feature-grid">
+
+<article class="feature-card card">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4F05A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M9 3v18M3 9h6"></path></svg>
+<h3 class="feature-title">A microVM per machine</h3>
+<p class="feature-text">Each machine is a Firecracker microVM in a jail, with its own kernel. It keeps running through a restart or an upgrade of the server.</p>
+</article>
+
+<article class="feature-card card">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4F05A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-5-6-5M12 19h8"></path></svg>
+<h3 class="feature-title">Reach it your way</h3>
+<p class="feature-text"><code class="inline-code">ssh box1.hop</code>, scp, sftp, rsync, and port forwards. Or <code class="inline-code">hopbox connect</code> and the web terminal, with no SSH key.</p>
+</article>
+
+<article class="feature-card card">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4F05A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"></path></svg>
+<h3 class="feature-title">An HTTPS URL each</h3>
+<p class="feature-text">Every machine gets its own URL. It is private until you flip it public, and you pick the port it reaches.</p>
+</article>
+
+<article class="feature-card card">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4F05A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="3"></rect><path d="M12 8V4M9 13h.01M15 13h.01M9 16h6"></path></svg>
+<h3 class="feature-title">Built for agents</h3>
+<p class="feature-text">An MCP server turns the API into tools. Your agent creates machines, runs commands, and moves files, with the rights of its key and no more.</p>
+</article>
+
+<article class="feature-card card">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4F05A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"></path></svg>
+<h3 class="feature-title">CLI, API, and SDK</h3>
+<p class="feature-text">A typed API with idempotency keys, a TypeScript SDK, and a CLI with tab completion and JSON output for scripts.</p>
+</article>
+
+<article class="feature-card card">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C4F05A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 010 7M18.5 14.8c1.6.8 2.6 2.6 3 5.2"></path></svg>
+<h3 class="feature-title">Made for teams</h3>
+<p class="feature-text">Orgs with owners, admins, and members. API keys, env vars, sealed secrets, shared machines, and an audit log.</p>
+</article>
+
+</div>
+</section>
+
+<section class="section">
+<div class="panel agents-panel">
+<div class="agents-copy">
+<p class="eyebrow">FOR AI AGENTS</p>
+<h2 class="agents-title title-section display">Give your agent a computer, not a sandbox snippet.</h2>
+<p class="agents-text">Point any MCP client at hopbox. The agent gets tools to create machines, run commands, read and write files, read logs, and publish URLs.</p>
+<p class="agents-text">It acts with the rights of the key you give it. It cannot make keys, invite people, or delete your account.</p>
+</div>
+<div class="code-panel">
+<div class="code-comment"># add hopbox to Claude Code</div>
+<div class="code-command"><span class="code-prompt">$ </span>claude mcp add --transport http hopbox \
+    https://dev.hopbox.dev/mcp \
+    --header 'Authorization: Bearer ${HOPBOX_MCP_KEY}'</div>
+<div class="code-comment code-gap"># then, in the agent</div>
+<div class="code-input">&gt; make box1, run the tests in it, and</div>
+<div class="code-input">  send me its public URL</div>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head">
+<div>
+<p class="eyebrow eyebrow-amber">COMING NEXT</p>
+<h2 class="section-head-title title-section display">Four more hops to 1.0.</h2>
+</div>
+<a class="more-link" href="/roadmap/">See the roadmap</a>
+</div>
+<div class="teaser-grid">
+<a class="teaser-card card" href="/roadmap/">
+<span class="teaser-version">v0.2</span>
+<span class="teaser-title">Fleet</span>
+<span class="teaser-text">Many servers per install, with machines moved between them.</span>
+</a>
+<a class="teaser-card card" href="/roadmap/">
+<span class="teaser-version">v0.3</span>
+<span class="teaser-title">Memory tiers</span>
+<span class="teaser-text">Standby, hibernate, fork, checkpoints, snapshots, and backups.</span>
+</a>
+<a class="teaser-card card" href="/roadmap/">
+<span class="teaser-version">v0.4</span>
+<span class="teaser-title">Networking</span>
+<span class="teaser-text">Private networks, custom domains, egress allowlists, raw TCP and UDP.</span>
+</a>
+<a class="teaser-card card" href="/roadmap/">
+<span class="teaser-version">v0.5</span>
+<span class="teaser-title">Agent experience</span>
+<span class="teaser-text">Coding agents preinstalled, a desktop and browser, runs, and cron.</span>
+</a>
+</div>
+</section>
+
+<section class="section cta">
+<div class="cta-panel dots">
+<h2 class="cta-title display">Hop into a box.</h2>
+<p class="cta-text">Sign in with GitHub, start your first machine, and connect to it with SSH.</p>
+<div class="btn-row cta-actions">
+<a class="btn btn-primary" href="https://dev.hopbox.dev">Try hopbox</a>
+<a class="btn btn-secondary" href="/use-cases/">See use cases</a>
+</div>
+</div>
+</section>
+
 </main>
+
+<footer class="site-footer">
+<div class="footer-inner">
+<span class="footer-brand">hopbox</span>
+<a class="footer-link" href="/use-cases/">Use cases</a>
+<a class="footer-link" href="/roadmap/">Roadmap</a>
+<a class="footer-link" href="https://docs.hopbox.dev">Docs</a>
+<a class="footer-link" href="https://dev.hopbox.dev">Try hopbox</a>
+<span class="footer-version">v0.1.0</span>
+</div>
+</footer>
+
 </body>
 </html>

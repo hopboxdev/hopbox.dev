@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use cases · hopbox</title>
+<meta name="description" content="One machine per developer, per preview, per agent, per customer.">
+<meta name="theme-color" content="#0A0E0B">
+<link rel="canonical" href="https://hopbox.dev/use-cases/">
+<meta property="og:title" content="Use cases · hopbox">
+<meta property="og:description" content="One machine per developer, per preview, per agent, per customer.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hopbox.dev/use-cases/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+<nav class="nav" aria-label="Main">
+<a class="brand" href="/">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="3" y="9" width="16" height="16" rx="4" fill="#C4F05A"></rect><rect x="12" y="3" width="13" height="13" rx="3.5" fill="none" stroke="#C4F05A" stroke-width="2"></rect></svg>
+hopbox
+</a>
+<a class="nav-link" href="/use-cases/" aria-current="page">Use cases</a>
+<a class="nav-link" href="/roadmap/">Roadmap</a>
+<a class="nav-link" href="https://docs.hopbox.dev">Docs</a>
+<a class="btn btn-nav" href="https://dev.hopbox.dev">Try hopbox<span class="preview-tag">PREVIEW</span></a>
+</nav>
+</header>
+
+<main>
+
+<section class="page-hero dots">
+<div class="page-hero-inner">
+<p class="eyebrow rise">USE CASES</p>
+<h1 class="use-cases-title page-title display rise">One machine per developer, per preview, per agent, per customer.</h1>
+</div>
+</section>
+
+<section class="section cases">
+<div class="case-grid">
+
+<article class="case-card card">
+<span class="chip chip-live">Works today</span>
+<h2 class="case-title">Development environments</h2>
+<p class="case-text">A Linux machine that keeps its disk between sessions. Open it from any laptop with SSH, or from a browser tab.</p>
+<pre class="case-code">hopbox new box1
+ssh box1.hop</pre>
+</article>
+
+<article class="case-card card">
+<span class="chip chip-live">Works today</span>
+<h2 class="case-title">Preview environments</h2>
+<p class="case-text">Run a branch in its own machine and share one URL. Snapshots of the main branch make it faster in v0.3.</p>
+<pre class="case-code">hopbox url port box1 3000
+hopbox url public box1</pre>
+</article>
+
+<article class="case-card card">
+<span class="chip chip-live">Works today</span>
+<h2 class="case-title">Coding agents</h2>
+<p class="case-text">Your agent drives machines through MCP. In v0.5, machines come with coding agents preinstalled and signed in.</p>
+<pre class="case-code">claude mcp add --transport http \
+  hopbox https://dev.hopbox.dev/mcp</pre>
+</article>
+
+<article class="case-card card">
+<span class="chip chip-live">Works today</span>
+<h2 class="case-title">Always-on assistants</h2>
+<p class="case-text">Give a machine a start command and a restart policy. It comes back after every reboot.</p>
+<pre class="case-code">hopbox machine update box1 \
+  --start-command 'python3 bot.py'</pre>
+</article>
+
+<article class="case-card card">
+<span class="chip chip-live">Works today</span>
+<h2 class="case-title">One machine per customer</h2>
+<p class="case-text">Build agentic SaaS on the API: each end customer gets an isolated machine. Private networks between them come in v0.4.</p>
+<pre class="case-code">hopbox new box1 --json</pre>
+</article>
+
+<article class="case-card card">
+<span class="chip chip-live">Works today</span>
+<h2 class="case-title">Agent swarms</h2>
+<p class="case-text">Start many machines from a script or the SDK and run a task in each. Forks of a running machine come in v0.3.</p>
+<pre class="case-code">for i in 1 2 3; do hopbox new box$i; done</pre>
+</article>
+
+<article class="case-card case-card-planned card">
+<span class="chip chip-planned">v0.3</span>
+<h2 class="case-title">Reinforcement learning environments</h2>
+<p class="case-text">Save a machine as a snapshot, fork it many times, and reset each run to the same state.</p>
+</article>
+
+<article class="case-card case-card-planned card">
+<span class="chip chip-planned">v0.4</span>
+<h2 class="case-title">Untrusted code</h2>
+<p class="case-text">Every machine is a microVM today. Isolated machines with no personal credentials and an egress allowlist come in v0.4.</p>
+</article>
+
+<article class="case-card case-card-planned card">
+<span class="chip chip-planned">Later release</span>
+<h2 class="case-title">Machines for agent platforms</h2>
+<p class="case-text">Run the tools of outside agent platforms, such as Claude Managed Agents and the OpenAI Agents API, in hopbox machines.</p>
+</article>
+
+</div>
+</section>
+
+<section class="section pr-flow">
+<div class="panel">
+<div class="pr-tags">
+<span class="chip chip-planned">v0.3, then a GitHub Action</span>
+</div>
+<h2 class="pr-title display">Review a pull request by booting it.</h2>
+<p class="pr-text">Every pull request gets a full Linux machine with the build in it, a public URL, and an SSH command. No virtual machine in the browser, and no build cache to set up.</p>
+<ol class="steps">
+<li class="step"><span class="step-number">01</span>A pull request opens. CI calls the hopbox API.</li>
+<li class="step"><span class="step-number">02</span>hopbox starts a machine from a snapshot of the main branch, in seconds.</li>
+<li class="step"><span class="step-number">03</span>The job fetches the pull request into the machine and builds it.</li>
+<li class="step"><span class="step-number">04</span>The app URL goes public. A web terminal can come with it.</li>
+<li class="step"><span class="step-number">05</span>A comment on the pull request holds the URLs and the SSH command.</li>
+<li class="step"><span class="step-number">06</span>The pull request closes. The machine is deleted.</li>
+</ol>
+</div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+<div class="footer-inner">
+<span class="footer-brand">hopbox</span>
+<a class="footer-link" href="/use-cases/">Use cases</a>
+<a class="footer-link" href="/roadmap/">Roadmap</a>
+<a class="footer-link" href="https://docs.hopbox.dev">Docs</a>
+<a class="footer-link" href="https://dev.hopbox.dev">Try hopbox</a>
+<span class="footer-version">v0.1.0</span>
+</div>
+</footer>
+
+</body>
+</html>

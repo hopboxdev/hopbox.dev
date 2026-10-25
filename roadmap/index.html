@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap · hopbox</title>
+<meta name="description" content="Five hops to 1.0. The first one has landed. Each phase ends with a tagged pre-release. The hosted service opens at 1.0, after phase 5.">
+<meta name="theme-color" content="#0A0E0B">
+<link rel="canonical" href="https://hopbox.dev/roadmap/">
+<meta property="og:title" content="Roadmap · hopbox">
+<meta property="og:description" content="Five hops to 1.0. The first one has landed. Each phase ends with a tagged pre-release. The hosted service opens at 1.0, after phase 5.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hopbox.dev/roadmap/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+<nav class="nav" aria-label="Main">
+<a class="brand" href="/">
+<svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="3" y="9" width="16" height="16" rx="4" fill="#C4F05A"></rect><rect x="12" y="3" width="13" height="13" rx="3.5" fill="none" stroke="#C4F05A" stroke-width="2"></rect></svg>
+hopbox
+</a>
+<a class="nav-link" href="/use-cases/">Use cases</a>
+<a class="nav-link" href="/roadmap/" aria-current="page">Roadmap</a>
+<a class="nav-link" href="https://docs.hopbox.dev">Docs</a>
+<a class="btn btn-nav" href="https://dev.hopbox.dev">Try hopbox<span class="preview-tag">PREVIEW</span></a>
+</nav>
+</header>
+
+<main>
+
+<section class="page-hero dots">
+<div class="page-hero-inner">
+<p class="eyebrow">ROADMAP</p>
+<h1 class="roadmap-title page-title display">Five hops to 1.0. The first one has landed.</h1>
+<p class="roadmap-lead">Each phase ends with a tagged pre-release. The hosted service opens at 1.0, after phase 5.</p>
+<div class="progress" aria-hidden="true">
+<div class="progress-track"></div>
+<div class="progress-fill"></div>
+<div class="progress-marker"></div>
+<div class="progress-labels"><span>start</span><span class="progress-current">v0.1</span><span>v0.2</span><span>v0.3</span><span>v0.4</span><span>v0.5 / 1.0</span></div>
+</div>
+</div>
+</section>
+
+<section class="section phases-section">
+<ol class="phases">
+
+<li class="phase phase-shipped">
+<div class="phase-head">
+<span class="chip chip-shipped pulse-wide">Shipped: v0.1.0</span>
+<h2 class="phase-title">Phase 1<br>Foundation</h2>
+</div>
+<ul class="phase-items">
+<li>Firecracker microVM per machine</li>
+<li>Create, start, stop, reboot, delete</li>
+<li>SSH, hopbox connect, web terminal</li>
+<li>Exec and file copy</li>
+<li>An HTTPS URL per machine</li>
+<li>Sign-in with GitHub, Google, or email</li>
+<li>Orgs, roles, API keys, sealed secrets</li>
+<li>API, TypeScript SDK, CLI, console</li>
+<li>MCP server for AI agents</li>
+<li>Default image with Docker and dev tools</li>
+</ul>
+</li>
+
+<li class="phase phase-planned">
+<div class="phase-head">
+<span class="chip chip-planned">Next: v0.2</span>
+<h2 class="phase-title">Phase 2<br>Fleet</h2>
+</div>
+<ul class="phase-items">
+<li>Machines spread over many servers</li>
+<li>A private mesh between servers</li>
+<li>Separate edge servers</li>
+<li>Machines moved off a server on drain</li>
+<li>More machine sizes</li>
+<li>An admin area in the console</li>
+</ul>
+</li>
+
+<li class="phase phase-planned">
+<div class="phase-head">
+<span class="chip chip-planned">v0.3</span>
+<h2 class="phase-title">Phase 3<br>Memory tiers</h2>
+</div>
+<ul class="phase-items">
+<li>Standby and hibernate</li>
+<li>Checkpoints and versioned snapshots</li>
+<li>Forks of a running machine</li>
+<li>Backups to object storage</li>
+<li>Wake on connect</li>
+<li>Extra disks</li>
+</ul>
+</li>
+
+<li class="phase phase-planned">
+<div class="phase-head">
+<span class="chip chip-planned">v0.4</span>
+<h2 class="phase-title">Phase 4<br>Networking</h2>
+</div>
+<ul class="phase-items">
+<li>Org private networks and internal DNS</li>
+<li>Tag networks</li>
+<li>Egress allowlists</li>
+<li>Placeholder secrets</li>
+<li>Subdomain routes and custom domains</li>
+<li>Org wildcard domains</li>
+<li>Raw TCP and UDP ports</li>
+<li>Isolated machines</li>
+</ul>
+</li>
+
+<li class="phase phase-planned">
+<div class="phase-head">
+<span class="chip chip-planned">v0.5</span>
+<h2 class="phase-title">Phase 5<br>Agent experience</h2>
+</div>
+<ul class="phase-items">
+<li>Coding agents preinstalled</li>
+<li>Agent logins injected at boot</li>
+<li>A CLI inside every machine</li>
+<li>A desktop and an agent browser</li>
+<li>Run deploys and cron runs</li>
+<li>Integrations and automations</li>
+<li>A GitHub Action for pull requests</li>
+<li>OIDC single sign-on</li>
+<li>A Python SDK</li>
+</ul>
+</li>
+
+<li class="phase phase-final">
+<div class="phase-head">
+<span class="chip chip-final">1.0</span>
+<h2 class="phase-title">Hosted service opens</h2>
+</div>
+<p class="phase-note">Version 1.0 closes phase 5 and opens the hosted service. Until then, hopbox is in preview, and machines and their data can be erased.</p>
+</li>
+
+</ol>
+</section>
+
+</main>
+
+<footer class="site-footer">
+<div class="footer-inner">
+<span class="footer-brand">hopbox</span>
+<a class="footer-link" href="/use-cases/">Use cases</a>
+<a class="footer-link" href="/roadmap/">Roadmap</a>
+<a class="footer-link" href="https://docs.hopbox.dev">Docs</a>
+<a class="footer-link" href="https://dev.hopbox.dev">Try hopbox</a>
+<span class="footer-version">v0.1.0</span>
+</div>
+</footer>
+
+</body>
+</html>
