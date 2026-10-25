@@ -919,6 +919,69 @@ a:where(:hover) {
   animation: pulse-wide 2s ease-in-out infinite;
 }
 
+.notfound {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 48px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ground);
+  overflow: hidden;
+}
+
+.notfound-inner {
+  max-width: 640px;
+  width: 100%;
+}
+
+.notfound-scene {
+  position: relative;
+  height: 150px;
+  margin-bottom: 8px;
+}
+
+.notfound-ground {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+  width: 180px;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--line-bright);
+}
+
+.notfound-box {
+  position: absolute;
+  left: 24px;
+  bottom: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
+  background: var(--lime);
+  animation: away 3.6s cubic-bezier(.4, 0, .6, 1) infinite;
+}
+
+.notfound-code {
+  margin: 0 0 8px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--lime);
+}
+
+.notfound-title {
+  margin: 0 0 16px;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.notfound-text {
+  margin: 0 0 32px;
+  max-width: 30rem;
+  font-size: 19px;
+  color: var(--muted);
+}
 
 .rise { animation: rise .8s cubic-bezier(.2, .7, .2, 1) both; }
 .rise-2 { animation: rise .8s .12s cubic-bezier(.2, .7, .2, 1) both; }
@@ -967,6 +1030,16 @@ a:where(:hover) {
   from { width: 0; }
 }
 
+@keyframes away {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  12% { transform: translate(0, 4px) scale(1.15, .85); }
+  30% { transform: translate(70px, -90px) rotate(70deg); }
+  50% { transform: translate(140px, 0) rotate(140deg) scale(1); }
+  58% { transform: translate(150px, 2px) scale(1.12, .88) rotate(180deg); }
+  75% { transform: translate(230px, -60px) rotate(250deg); opacity: 1; }
+  90% { transform: translate(300px, 140px) rotate(320deg); opacity: 0; }
+  100% { transform: translate(0, 0); opacity: 0; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   * {

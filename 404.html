@@ -3,23 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>hopbox</title>
-<meta name="description" content="hopbox is being rebuilt from scratch.">
-<style>
-:root { color-scheme: light dark; --bg: #f6f7f5; --fg: #1a211b; --muted: #5b665d; }
-@media (prefers-color-scheme: dark) { :root { --bg: #111512; --fg: #e4eae5; --muted: #9aa89c; } }
-html, body { height: 100%; }
-body { margin: 0; padding: 24px; box-sizing: border-box; display: grid; place-items: center; background: var(--bg); color: var(--fg); font: 17px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
-main { max-width: 34rem; }
-h1 { font-size: 2rem; margin: 0 0 .5rem; letter-spacing: -.01em; }
-p { margin: 0 0 .75rem; color: var(--muted); }
-</style>
+<title>Page not found · hopbox</title>
+<meta name="description" content="The page you asked for is not here. It may have moved, or the link has a typo.">
+<meta name="theme-color" content="#0A0E0B">
+<meta property="og:title" content="Page not found · hopbox">
+<meta property="og:description" content="The page you asked for is not here. It may have moved, or the link has a typo.">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
-<main>
-<h1>hopbox</h1>
-<p>hopbox is being rebuilt from scratch.</p>
-<p>The previous version is retired and can no longer be installed.</p>
+
+<main class="notfound dots">
+<div class="notfound-inner">
+<div class="notfound-scene" aria-hidden="true">
+<div class="notfound-ground"></div>
+<div class="notfound-box"></div>
+</div>
+<p class="notfound-code">404</p>
+<h1 class="notfound-title display">This box hopped away.</h1>
+<p class="notfound-text">The page you asked for is not here. It may have moved, or the link has a typo.</p>
+<div class="btn-row">
+<a class="btn btn-primary" href="/">Back to hopbox</a>
+<a class="btn btn-secondary" href="https://docs.hopbox.dev">Read the docs</a>
+</div>
+</div>
 </main>
+
 </body>
 </html>
