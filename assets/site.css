@@ -317,30 +317,6 @@ a:where(:hover) {
   color: var(--color-text-muted);
 }
 
-.tools {
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.tools-inner {
-  max-width: var(--page-max);
-  margin: 0 auto;
-  padding: var(--space-5) var(--page-gutter);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2) var(--space-8);
-  font: var(--text-code);
-  color: var(--color-text-secondary);
-}
-
-.tools-label {
-  font: var(--text-label);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
 .features-title {
   margin-bottom: var(--space-12);
   text-wrap: balance;
