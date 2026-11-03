@@ -73,6 +73,10 @@ a:where(:hover) {
   color: var(--color-text-muted);
 }
 
+.version {
+  text-transform: none;
+}
+
 .dots {
   background-image: radial-gradient(var(--color-surface) 1px, transparent 1px);
   background-size: 24px 24px;
@@ -235,8 +239,8 @@ a:where(:hover) {
 }
 
 .badge-shipped {
-  background: var(--color-accent);
-  color: var(--color-on-accent);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent-text);
 }
 
 .badge-planned {
