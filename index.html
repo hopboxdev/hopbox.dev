@@ -22,7 +22,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Martian+Mono:wght@400;500&amp;display=swap">
 <link rel="stylesheet" href="/assets/brand/tokens.css">
 <link rel="stylesheet" href="/assets/site.css">
-<script src="/assets/terminal.js" defer></script>
 </head>
 <body>
 
@@ -43,53 +42,60 @@
 <section class="hero dots">
 <div class="hero-inner">
 <div class="hero-copy">
-<p class="release-badge rise"><span class="release-dot pulse"></span>v0.1.0 pre-release: phase 1 shipped</p>
-<h1 class="hero-title display rise-2">Persistent, hardware-isolated Linux machines for <span class="accent">developers</span> and <span class="accent">AI agents</span>.</h1>
-<p class="hero-lead rise-3">Every machine is its own Firecracker microVM. It keeps its disk, answers on SSH, and gets its own HTTPS URL. Drive it from your terminal, your code, or your agent.</p>
-<div class="btn-row hero-actions rise-3">
-<a class="btn btn-primary" href="https://dev.hopbox.dev">Try hopbox<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
-<a class="btn btn-secondary" href="https://docs.hopbox.dev">Read the docs</a>
+<p class="eyebrow">v0.1.0 pre-release: phase 1 shipped</p>
+<h1 class="hero-title display">Real Linux machines that stay put.</h1>
+<p class="hero-lead">Every machine is its own Firecracker microVM. It keeps its disk, answers on SSH, and gets its own HTTPS URL. Drive it from your terminal, your code, or your agent.</p>
+<div class="btn-row hero-actions">
+<a class="btn btn-primary btn-lg" href="https://dev.hopbox.dev">Try hopbox</a>
+<a class="btn btn-secondary btn-lg" href="https://docs.hopbox.dev">Read the docs</a>
 </div>
 <p class="hero-note">hopbox is in preview. Machines and their data can be erased at any time before 1.0.</p>
 </div>
 
-<div class="hero-demo">
-<div class="terminal">
-<div class="terminal-bar">
-<span class="terminal-light"></span>
-<span class="terminal-light"></span>
-<span class="terminal-light"></span>
-<span class="terminal-title">~/work</span>
-</div>
-<div class="terminal-screen">
-<div id="terminal-transcript">
-<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span>hopbox new box1</div>
-<div class="terminal-line terminal-out">state   running</div>
-<div class="terminal-line terminal-out">url     https://box1.dev.hopbox.dev (private, port 8000)</div>
-<div class="terminal-line terminal-out">ssh     ssh box1.hop (port 10001)</div>
-<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span>ssh box1.hop</div>
-<div class="terminal-line terminal-out">user@box1:~$ exit</div>
-<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span>hopbox url public box1</div>
-<div class="terminal-line terminal-out">https://box1.dev.hopbox.dev (public, port 8000)</div>
-<div class="terminal-line terminal-cmd"><span class="terminal-prompt">$ </span><span class="caret"></span></div>
-</div>
-</div>
-</div>
-<div class="hop-row" aria-hidden="true">
-<span class="hop-box hop-box-solid"></span>
-<span class="hop-box hop-box-outline"></span>
-<span class="hop-box hop-box-solid"></span>
-<span class="hop-box hop-box-dim"></span>
-<span class="hop-box hop-box-solid"></span>
-<span class="hop-box hop-box-outline"></span>
-<span class="hop-box hop-box-solid"></span>
-<span class="hop-box hop-box-dim"></span>
-<span class="hop-box hop-box-solid"></span>
-<span class="hop-box hop-box-outline"></span>
-<span class="hop-box hop-box-solid"></span>
-<span class="hop-box hop-box-dim"></span>
+<div class="hero-fleet">
+<svg class="hero-mark" xmlns="http://www.w3.org/2000/svg" viewBox="12 7 76 86" width="194" height="220" role="img" aria-label="Hopbox">
+<polygon points="17.1,31 50,50 50,88 17.1,69" fill="#EDEEE8"/>
+<g fill="none" stroke="#EDEEE8" stroke-width="8" stroke-linejoin="round" stroke-linecap="round">
+<polygon points="50,12 82.9,31 82.9,69 50,88 17.1,69 17.1,31"/>
+<path d="M17.1 31L50 50L82.9 31M50 50V88"/>
+</g>
+<polygon class="hb-blink" points="66.5,49.6 74.4,45.1 74.4,64.8 66.5,69.4" fill="#C6EA2B" stroke="#C6EA2B" stroke-width="2" stroke-linejoin="round"/>
+</svg>
+<ul class="machines" aria-label="Example machines">
+<li class="machine machine-running">
+<svg class="glyph" viewBox="0 0 100 100" width="24" height="24" aria-hidden="true"><path d="M50 16L79.4 33M79.4 33L79.4 67M79.4 67L50 84M79.4 33L50 50M50 84L50 50M20.6 33L50 50" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>box1</span>
+<span class="machine-url">box1.dev.hopbox.dev</span>
+<span class="badge badge-running">Running</span>
+</li>
+<li class="machine machine-running">
+<svg class="glyph" viewBox="0 0 100 100" width="24" height="24" aria-hidden="true"><path d="M50 16L79.4 33M50 84L20.6 67M20.6 67L20.6 33M79.4 33L50 50M20.6 33L50 50" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>box2</span>
+<span class="machine-url">box2.dev.hopbox.dev</span>
+<span class="badge badge-running">Running</span>
+</li>
+<li class="machine machine-stopped">
+<svg class="glyph" viewBox="0 0 100 100" width="24" height="24" aria-hidden="true"><path d="M79.4 33L79.4 67M50 84L20.6 67M20.6 67L20.6 33M20.6 33L50 16M79.4 33L50 50M20.6 33L50 50" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>box3</span>
+<span class="machine-url">box3.dev.hopbox.dev</span>
+<span class="badge badge-stopped">Stopped</span>
+</li>
+</ul>
 </div>
 </div>
+</section>
+
+<section class="section">
+<div class="terminal code-block">
+<div class="terminal-title">~/work</div>
+<pre class="terminal-screen"><code><span class="prompt">$ </span>hopbox new box1
+<span class="output">state   running
+url     https://box1.dev.hopbox.dev (private, port 8000)
+ssh     ssh box1.hop (port 10001)</span>
+<span class="prompt">$ </span>ssh box1.hop
+<span class="prompt">user@<span class="host">box1</span>:~$ </span>exit
+<span class="prompt">$ </span>hopbox url public box1
+<span class="output">https://box1.dev.hopbox.dev (public, port 8000)</span></code></pre>
 </div>
 </section>
 
