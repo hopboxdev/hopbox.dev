@@ -88,7 +88,7 @@
 <section class="section">
 <div class="terminal code-block">
 <div class="terminal-title">~/work</div>
-<pre class="terminal-screen"><code><span class="prompt">$ </span>hopbox new box1
+<pre class="terminal-screen" role="group" tabindex="0" aria-label="Transcript of a hopbox session"><code><span class="prompt">$ </span>hopbox new box1
 <span class="output">state   running
 url     https://box1.dev.hopbox.dev (private, port 8000)
 ssh     ssh box1.hop (port 10001)</span>
@@ -157,7 +157,7 @@ ssh     ssh box1.hop (port 10001)</span>
 <p class="agents-text">Point any MCP client at hopbox. The agent gets tools to create machines, run commands, read and write files, read logs, and publish URLs.</p>
 <p class="agents-text">It acts with the rights of the key you give it. It cannot make keys, invite people, or delete your account.</p>
 </div>
-<pre class="code-panel code-block"><code><span class="code-comment"># add hopbox to Claude Code</span>
+<pre class="code-panel code-block" role="group" tabindex="0" aria-label="Add hopbox to Claude Code"><code><span class="code-comment"># add hopbox to Claude Code</span>
 <span class="prompt">$ </span>claude mcp add --transport http hopbox \
     https://dev.hopbox.dev/mcp \
     --header 'Authorization: Bearer ${HOPBOX_MCP_KEY}'

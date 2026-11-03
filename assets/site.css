@@ -259,8 +259,8 @@ a:where(:hover) {
   background: var(--color-bg);
   font: var(--text-code);
   color: var(--color-text);
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  white-space: pre;
+  overflow-x: auto;
 }
 
 .code-block code {
@@ -677,10 +677,6 @@ a:where(:hover) {
     font: var(--text-code-compact);
   }
 
-  .code-panel {
-    padding: var(--space-3);
-  }
-
   .cta-panel {
     padding: var(--space-12) var(--space-6);
   }
@@ -803,7 +799,13 @@ a:where(:hover) {
 .terminal-screen {
   padding: var(--space-5);
   font: inherit;
-  white-space: pre-wrap;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* The terminal box clips overflow, so the focus ring must sit inside it. */
+.terminal-screen:focus-visible {
+  outline-offset: -2px;
 }
 
 @media (min-width: 1100px) {
