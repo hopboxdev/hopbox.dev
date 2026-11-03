@@ -678,7 +678,7 @@ a:where(:hover) {
 
   .code-panel,
   .case-code {
-    padding: var(--space-3);
+    padding: var(--space-3) var(--space-2);
   }
 
   .code-block {
