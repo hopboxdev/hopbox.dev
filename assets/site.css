@@ -848,3 +848,46 @@ a:where(:hover) {
     align-self: center;
   }
 }
+
+.page-notfound {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.notfound {
+  flex: 1;
+  padding: var(--space-12) var(--page-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notfound-inner {
+  width: 100%;
+  max-width: 640px;
+}
+
+.notfound-machine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-8);
+  font: 500 14px/1.3 var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.notfound-machine .badge {
+  align-self: center;
+}
+
+.notfound-title {
+  margin-bottom: var(--space-4);
+}
+
+.notfound-text {
+  max-width: 30rem;
+  margin-bottom: var(--space-8);
+  color: var(--color-text-secondary);
+}

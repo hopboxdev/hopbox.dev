@@ -21,20 +21,27 @@
 <link rel="stylesheet" href="/assets/brand/tokens.css">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
-<body>
+<body class="page-notfound">
+
+<header class="site-header">
+<nav class="nav" aria-label="Main">
+<a class="brand" href="/" aria-label="hopbox home"><img src="/assets/brand/hopbox-lockup.svg" alt="" width="113" height="30"></a>
+</nav>
+</header>
 
 <main class="notfound dots">
 <div class="notfound-inner">
-<div class="notfound-scene" aria-hidden="true">
-<div class="notfound-ground"></div>
-<div class="notfound-box"></div>
+<div class="notfound-machine">
+<svg class="glyph" viewBox="0 0 100 100" width="48" height="48" aria-hidden="true"><path d="M50 84L20.6 67M20.6 33L50 16M79.4 33L50 50M50 84L50 50M20.6 33L50 50" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>box404</span>
+<span class="badge badge-stopped">Stopped</span>
 </div>
-<p class="notfound-code">404</p>
+<p class="eyebrow">404</p>
 <h1 class="notfound-title display">This box hopped away.</h1>
 <p class="notfound-text">The page you asked for is not here. It may have moved, or the link has a typo.</p>
 <div class="btn-row">
-<a class="btn btn-primary" href="/">Back to hopbox</a>
-<a class="btn btn-secondary" href="https://docs.hopbox.dev">Read the docs</a>
+<a class="btn btn-primary btn-lg" href="/">Back to hopbox</a>
+<a class="btn btn-secondary btn-lg" href="https://docs.hopbox.dev">Read the docs</a>
 </div>
 </div>
 </main>
