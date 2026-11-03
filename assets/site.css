@@ -630,6 +630,18 @@ a:where(:hover) {
     --page-gutter: var(--space-6);
   }
 
+  .nav {
+    column-gap: var(--space-4);
+  }
+
+  .footer-brand {
+    margin-right: 0;
+  }
+
+  .footer-link {
+    justify-content: flex-start;
+  }
+
   .nav-links {
     order: 1;
     flex-basis: 100%;
@@ -882,7 +894,21 @@ a:where(:hover) {
   }
 }
 
+/* A 36 px lockup and the button do not fit on one row at these widths. */
 @media (max-width: 389px) {
+  .nav {
+    column-gap: var(--space-3);
+  }
+
+  .brand img {
+    width: auto;
+    height: 32px;
+  }
+
+  .nav .btn {
+    padding-inline: var(--space-3);
+  }
+
   .machine .badge {
     grid-row: 1;
   }
