@@ -707,7 +707,7 @@ a:where(:hover) {
 }
 
 .hero-title {
-  font-size: clamp(44px, 11vw, 56px);
+  font-size: clamp(44px, 11vw, 64px);
 }
 
 .hero-lead {
@@ -724,21 +724,23 @@ a:where(:hover) {
   color: var(--color-text-muted);
 }
 
+/* 52 px is the kit's clear space, the cursor height, for a 220 px mark. */
 .hero-fleet {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-12);
+  gap: 52px;
   min-width: 0;
 }
 
 .hero-mark {
   flex: none;
   width: auto;
-  height: 180px;
+  height: 220px;
 }
 
 .machines {
-  flex: 1 1 0;
+  width: 100%;
   min-width: 0;
   padding: 0;
   list-style: none;
@@ -803,12 +805,12 @@ a:where(:hover) {
 @media (min-width: 1100px) {
   .hero-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(600px, 57.8vw, 740px);
+    grid-template-columns: minmax(0, 1fr) clamp(480px, 43.75vw, 560px);
     align-items: center;
   }
 
-  .hero-mark {
-    height: clamp(180px, 17.2vw, 220px);
+  .hero-title {
+    font-size: clamp(56px, 5vw, 64px);
   }
 }
 
@@ -819,18 +821,11 @@ a:where(:hover) {
   }
 
   .hero-fleet {
-    flex-direction: column;
-    align-items: stretch;
     gap: var(--space-8);
   }
 
   .hero-mark {
-    align-self: flex-start;
     height: 112px;
-  }
-
-  .machines {
-    flex: none;
   }
 
   .machine {
