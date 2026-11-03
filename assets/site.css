@@ -271,6 +271,14 @@ a:where(:hover) {
   color: var(--color-text-muted);
 }
 
+/* A quoted value cannot split with a backslash, so it wraps visually with a hanging indent. */
+.code-wrap {
+  display: inline-block;
+  padding-left: 4ch;
+  text-indent: -4ch;
+  white-space: pre-wrap;
+}
+
 /* The prompt stays out of a selection, so a copied command runs as it is. */
 .prompt {
   color: var(--color-text-muted);
@@ -861,6 +869,16 @@ a:where(:hover) {
     grid-column: 3;
     grid-row: 1 / span 2;
     align-self: center;
+  }
+}
+
+/* The longest line needs 252 px, so below 360 px the block fills the panel width. */
+@media (max-width: 359px) {
+  .code-panel {
+    margin-inline: calc(var(--space-4) * -1);
+    padding-inline: var(--space-2);
+    border-inline: none;
+    border-radius: 0;
   }
 }
 
