@@ -159,13 +159,16 @@
 <p class="agents-text">It acts with the rights of the key you give it. It cannot make keys, invite people, or delete your account.</p>
 </div>
 <pre class="code-panel code-block" role="group" tabindex="0" aria-label="Add hopbox to Claude Code"><code><span class="code-comment"># add hopbox to Claude Code</span>
-<span class="prompt">$ </span>claude mcp add --transport http hopbox \
-    https://dev.hopbox.dev/mcp \
-    --header 'Authorization: Bearer ${HOPBOX_MCP_KEY}'
+<span class="prompt">$ </span>claude mcp add \
+  --transport http hopbox \
+  https://dev.hopbox.dev/mcp \
+  --header \
+  'Authorization: Bearer ${HOPBOX_MCP_KEY}'
 
 <span class="code-comment"># then, in the agent</span>
-&gt; make box1, run the tests in it, and
-  send me its public URL</code></pre>
+&gt; make box1, run the tests
+  in it, and send me
+  its public URL</code></pre>
 </div>
 </section>
 
