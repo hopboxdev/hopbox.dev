@@ -86,17 +86,24 @@
 </section>
 
 <section class="section">
-<div class="terminal code-block">
-<div class="terminal-title">~/work</div>
-<pre class="terminal-screen" role="group" tabindex="0" aria-label="Transcript of a hopbox session"><code><span class="prompt">$ </span>hopbox new box1
-<span class="output">state   running
-url     https://box1.dev.hopbox.dev (private, port 8000)
-ssh     ssh box1.hop (port 10001)</span>
-<span class="prompt">$ </span>ssh box1.hop
-<span class="prompt">user@<span class="host">box1</span>:~$ </span>exit
-<span class="prompt">$ </span>hopbox url public box1
-<span class="output">https://box1.dev.hopbox.dev (public, port 8000)</span></code></pre>
-</div>
+<h2 class="quickstart-title heading">Three commands, from nothing to a public URL.</h2>
+<ol class="quickstart">
+<li class="quickstart-card card">
+<h3 class="title">Make a machine</h3>
+<pre class="quickstart-command code-block"><span class="prompt">$ </span>hopbox new box1</pre>
+<p class="quickstart-text">It starts running, with its own URL. The URL is private.</p>
+</li>
+<li class="quickstart-card card">
+<h3 class="title">Connect to it</h3>
+<pre class="quickstart-command code-block"><span class="prompt">$ </span>ssh box1.hop</pre>
+<p class="quickstart-text">You get a shell on the machine. Its disk stays when you log out.</p>
+</li>
+<li class="quickstart-card card">
+<h3 class="title">Share it</h3>
+<pre class="quickstart-command code-block"><span class="prompt">$ </span>hopbox url public box1</pre>
+<p class="quickstart-text">Anyone can now open <span class="quickstart-url">https://box1.dev.hopbox.dev</span>.</p>
+</li>
+</ol>
 </section>
 
 <section class="section">

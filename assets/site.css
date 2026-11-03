@@ -272,14 +272,6 @@ a:where(:hover) {
   color: var(--color-text-muted);
 }
 
-.host {
-  color: var(--color-accent-text);
-}
-
-.output {
-  color: var(--color-text-secondary);
-}
-
 .site-footer {
   border-top: 1px solid var(--color-border);
 }
@@ -764,28 +756,50 @@ a:where(:hover) {
   color: var(--color-text-muted);
 }
 
-.terminal {
-  overflow: hidden;
-  white-space: normal;
+.quickstart-title {
+  margin-bottom: var(--space-5);
+  font-size: clamp(28px, 3vw, 36px);
 }
 
-.terminal-title {
-  padding: var(--space-3) var(--space-5);
-  border-bottom: 1px solid var(--color-border);
+.quickstart {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.quickstart-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-6);
+}
+
+/* These commands wrap at a space on very narrow screens, so that they never scroll. */
+.quickstart-command {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
   font: var(--text-code-compact);
-  color: var(--color-text-muted);
+  white-space: pre-wrap;
+  overflow-x: visible;
 }
 
-.terminal-screen {
-  padding: var(--space-5);
-  font: inherit;
-  white-space: pre;
-  overflow-x: auto;
+.quickstart-text {
+  font: var(--text-small);
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
 }
 
-/* The terminal box clips overflow, so the focus ring must sit inside it. */
-.terminal-screen:focus-visible {
-  outline-offset: -2px;
+.quickstart-url {
+  font: var(--text-code-compact);
+  color: var(--color-text);
+}
+
+@media (min-width: 1024px) {
+  .quickstart {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1100px) {
@@ -808,6 +822,10 @@ a:where(:hover) {
 
   .hero-fleet {
     gap: var(--space-8);
+  }
+
+  .quickstart-card {
+    padding: var(--space-4);
   }
 
   .hero-mark {
