@@ -749,7 +749,7 @@ a:where(:hover) {
 
 .machine-url {
   min-width: 0;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
   font-weight: 400;
   color: var(--color-text-secondary);
 }
@@ -827,6 +827,16 @@ a:where(:hover) {
     grid-column: 3;
     grid-row: 1 / span 2;
     align-self: center;
+  }
+}
+
+@media (max-width: 389px) {
+  .machine .badge {
+    grid-row: 1;
+  }
+
+  .machine-url {
+    grid-column: 2 / span 2;
   }
 }
 
