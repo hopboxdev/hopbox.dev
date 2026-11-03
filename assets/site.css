@@ -342,8 +342,8 @@ a:where(:hover) {
 }
 
 .features-title {
-  max-width: 46rem;
   margin-bottom: var(--space-12);
+  text-wrap: balance;
 }
 
 .feature-grid {
@@ -651,6 +651,10 @@ a:where(:hover) {
   .nav-links {
     order: 1;
     flex-basis: 100%;
+  }
+
+  .wide-only {
+    display: none;
   }
 
   .panel,
