@@ -9,11 +9,15 @@ The public site for hopbox, the cloud machines for developers and AI agents.
 - `roadmap/index.html` shows the five phases to 1.0.
 - `404.html` is the page that GitHub Pages shows for a missing URL.
 
-All pages share `assets/site.css`. The home page also loads `assets/terminal.js`, which animates the terminal in the hero.
+All pages share `assets/site.css`. The site has no JavaScript.
+
+The `assets/brand` folder holds files from the hopbox brand kit: the design tokens, the logo, the favicons, and the Open Graph image. Do not edit these files. If the kit changes, copy the new files from the kit.
+
+`assets/site.css` uses the semantic tokens from `assets/brand/tokens.css`. Do not add raw color values to it.
 
 ## How the site works
 
-The site is plain HTML, CSS, and JavaScript. It has no build step.
+The site is plain HTML and CSS. It has no build step.
 
 GitHub Pages serves the `main` branch at https://hopbox.dev. The `CNAME` file holds the domain. The `.nojekyll` file stops GitHub Pages from running Jekyll.
 

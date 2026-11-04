@@ -5,30 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page not found · hopbox</title>
 <meta name="description" content="The page you asked for is not here. It may have moved, or the link has a typo.">
-<meta name="theme-color" content="#0A0E0B">
+<meta name="theme-color" content="#0D0E0C">
 <meta property="og:title" content="Page not found · hopbox">
 <meta property="og:description" content="The page you asked for is not here. It may have moved, or the link has a typo.">
 <meta property="og:type" content="website">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="https://hopbox.dev/assets/brand/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/brand/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Martian+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="/assets/brand/tokens.css">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
-<body>
+<body class="page-notfound">
+
+<header class="site-header">
+<nav class="nav" aria-label="Main">
+<a class="brand" href="/" aria-label="Hopbox home"><img src="/assets/brand/hopbox-lockup.svg" alt="" width="129" height="36"></a>
+</nav>
+</header>
 
 <main class="notfound dots">
 <div class="notfound-inner">
-<div class="notfound-scene" aria-hidden="true">
-<div class="notfound-ground"></div>
-<div class="notfound-box"></div>
+<div class="notfound-machine">
+<svg class="glyph" viewBox="0 0 100 100" width="48" height="48" aria-hidden="true"><path d="M50 84L20.6 67M20.6 33L50 16M79.4 33L50 50M50 84L50 50M20.6 33L50 50" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span>box404</span>
+<span class="badge badge-stopped">Stopped</span>
 </div>
-<p class="notfound-code">404</p>
+<p class="eyebrow">404</p>
 <h1 class="notfound-title display">This box hopped away.</h1>
 <p class="notfound-text">The page you asked for is not here. It may have moved, or the link has a typo.</p>
 <div class="btn-row">
-<a class="btn btn-primary" href="/">Back to hopbox</a>
-<a class="btn btn-secondary" href="https://docs.hopbox.dev">Read the docs</a>
+<a class="btn btn-primary btn-lg" href="/">Back to hopbox</a>
+<a class="btn btn-secondary btn-lg" href="https://docs.hopbox.dev">Read the docs</a>
 </div>
 </div>
 </main>
