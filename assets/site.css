@@ -300,8 +300,21 @@ a:where(:hover) {
   display: block;
 }
 
+/* The visible copy can start a drag. The hidden text serves find-in-page, screen readers, and pages without CSS. */
 .code-comment::before {
   content: attr(data-comment);
+  content: attr(data-comment) / "";
+}
+
+.code-comment-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .site-footer {
@@ -420,7 +433,6 @@ a:where(:hover) {
   text-wrap: balance;
 }
 
-.agent-prompt-text .code-comment,
 .prompt-agent {
   margin-left: -2ch;
 }
