@@ -61,7 +61,7 @@
 <span class="badge badge-running">Works today</span>
 <h2 class="title">Preview environments</h2>
 <p class="case-text">Run a branch in its own machine and share one URL. Snapshots of the main branch make it faster in v0.3.</p>
-<pre class="case-code code-block" role="group" tabindex="0" aria-label="Commands for preview environments"><span class="prompt"></span>hopbox url port box1 3000
+<pre class="case-code code-block"><span class="prompt"></span>hopbox url port box1 3000
 <span class="prompt"></span>hopbox url public box1</pre>
 </article>
 
@@ -69,7 +69,7 @@
 <span class="badge badge-running">Works today</span>
 <h2 class="title">Coding agents</h2>
 <p class="case-text">Your agent drives machines through MCP. In v0.5, machines come with coding agents preinstalled and signed in.</p>
-<pre class="case-code code-block" role="group" tabindex="0" aria-label="Commands for coding agents"><span class="prompt"></span>claude mcp add \
+<pre class="case-code code-block"><span class="prompt"></span>claude mcp add \
   --transport http hopbox \
   https://dev.hopbox.dev/mcp</pre>
 </article>
@@ -78,7 +78,7 @@
 <span class="badge badge-running">Works today</span>
 <h2 class="title">Always-on assistants</h2>
 <p class="case-text">Give a machine a start command and a restart policy. It comes back after every reboot.</p>
-<pre class="case-code code-block" role="group" tabindex="0" aria-label="Commands for always-on assistants"><span class="prompt"></span>hopbox machine update box1 \
+<pre class="case-code code-block"><span class="prompt"></span>hopbox machine update box1 \
   --start-command \
   'python3 bot.py'</pre>
 </article>
