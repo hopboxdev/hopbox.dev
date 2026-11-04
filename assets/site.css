@@ -280,7 +280,7 @@ a:where(:hover) {
   white-space: pre-wrap;
 }
 
-/* Generated text stays out of a copy, because a shell reads a pasted $, >, or #. Unlike user-select: none, it lets a drag start on it. */
+/* Generated marks stay out of a copy, because a shell reads a pasted $ or >. Unlike user-select: none, they let a drag start on them. */
 .prompt,
 .code-comment {
   color: var(--color-text-muted);
@@ -296,26 +296,14 @@ a:where(:hover) {
   content: "> " / "";
 }
 
+/* A pasted # fails in interactive zsh, so comments stay unselectable. With no pointer events, a drag that starts on one falls through to the block. */
 .code-comment {
   display: block;
-}
-
-/* The visible copy can start a drag. The hidden text serves find-in-page, screen readers, and pages without CSS. */
-.code-comment::before {
-  content: attr(data-comment);
-  content: attr(data-comment) / "";
-}
-
-.code-comment-text {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  pointer-events: none;
   -webkit-user-select: none;
   user-select: none;
 }
+
 
 .site-footer {
   border-top: 1px solid var(--color-border);
