@@ -90,17 +90,17 @@
 <ol class="quickstart">
 <li class="quickstart-card card">
 <h3 class="title">Make a machine</h3>
-<pre class="quickstart-command code-block"><span class="prompt">$ </span>hopbox new box1</pre>
+<pre class="quickstart-command code-block"><span class="prompt"></span>hopbox new box1</pre>
 <p class="quickstart-text">It starts running, with its own URL. The URL is private.</p>
 </li>
 <li class="quickstart-card card">
 <h3 class="title">Connect to it</h3>
-<pre class="quickstart-command code-block"><span class="prompt">$ </span>ssh box1.hop</pre>
+<pre class="quickstart-command code-block"><span class="prompt"></span>ssh box1.hop</pre>
 <p class="quickstart-text">You get a shell on the machine. Its disk stays when you log out.</p>
 </li>
 <li class="quickstart-card card">
 <h3 class="title">Share it</h3>
-<pre class="quickstart-command code-block"><span class="prompt">$ </span>hopbox url public box1</pre>
+<pre class="quickstart-command code-block"><span class="prompt"></span>hopbox url public box1</pre>
 <p class="quickstart-text">Anyone can now open <span class="quickstart-url">https://box1.dev.hopbox.dev</span>.</p>
 </li>
 </ol>
@@ -159,15 +159,13 @@
 <p class="agents-text">It acts with the rights of the key you give it. It cannot make keys, invite people, or delete your account.</p>
 </div>
 <div class="code-stack">
-<pre class="code-panel code-block"><code><span class="code-comment"># add hopbox to Claude Code
-</span><span class="prompt">$ </span>claude mcp add \
+<pre class="code-panel code-block"><code><span class="code-comment" data-comment="# add hopbox to Claude Code"></span><span class="prompt"></span>claude mcp add \
   --transport http hopbox \
   https://dev.hopbox.dev/mcp \
   --header \
 <span class="code-wrap">  'Authorization: Bearer ${HOPBOX_MCP_KEY}'</span></code></pre>
 <div class="code-panel code-block agent-prompt">
-<p class="code-comment"># then, in the agent</p>
-<p class="agent-prompt-text"><span class="prompt">&gt; </span>make box1, run the tests in it, and send me its public URL</p>
+<p class="agent-prompt-text"><span class="code-comment" data-comment="# then, in the agent"></span><span class="prompt prompt-agent"></span>make box1, run the tests in it, and send me its public URL</p>
 </div>
 </div>
 </div>

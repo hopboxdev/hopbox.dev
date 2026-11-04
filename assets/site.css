@@ -280,12 +280,28 @@ a:where(:hover) {
   white-space: pre-wrap;
 }
 
-/* These stay out of a selection, because a shell reads a pasted $, >, or # as part of a command. */
+/* Generated text stays out of a copy, because a shell reads a pasted $, >, or #. Unlike user-select: none, it lets a drag start on it. */
 .prompt,
 .code-comment {
   color: var(--color-text-muted);
-  -webkit-user-select: none;
-  user-select: none;
+}
+
+.prompt::before {
+  content: "$ ";
+  content: "$ " / "";
+}
+
+.prompt-agent::before {
+  content: "> ";
+  content: "> " / "";
+}
+
+.code-comment {
+  display: block;
+}
+
+.code-comment::before {
+  content: attr(data-comment);
 }
 
 .site-footer {
@@ -401,8 +417,12 @@ a:where(:hover) {
 
 .agent-prompt-text {
   padding-left: 2ch;
-  text-indent: -2ch;
   text-wrap: balance;
+}
+
+.agent-prompt-text .code-comment,
+.prompt-agent {
+  margin-left: -2ch;
 }
 
 .section-head {
