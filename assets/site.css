@@ -868,6 +868,10 @@ a:where(:hover) {
     padding: var(--space-4);
   }
 
+  .quickstart-command {
+    padding-inline: var(--space-2);
+  }
+
   .hero-mark {
     height: 112px;
   }
@@ -892,7 +896,6 @@ a:where(:hover) {
 @media (max-width: 359px) {
   .code-panel {
     margin-inline: calc(var(--space-4) * -1);
-    padding-inline: var(--space-2);
     border-inline: none;
     border-radius: 0;
   }
