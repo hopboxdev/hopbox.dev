@@ -127,6 +127,10 @@ a:where(:hover) {
   margin-right: auto;
 }
 
+.brand img {
+  width: auto;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -894,15 +898,9 @@ a:where(:hover) {
   }
 }
 
-/* A 36 px lockup and the button do not fit on one row at these widths. */
 @media (max-width: 389px) {
   .nav {
     column-gap: var(--space-3);
-  }
-
-  .brand img {
-    width: auto;
-    height: 32px;
   }
 
   .nav .btn {
@@ -915,6 +913,13 @@ a:where(:hover) {
 
   .machine-url {
     grid-column: 2 / span 2;
+  }
+}
+
+/* At 372 px and below, a 36 px lockup and the button do not fit on one row. */
+@media (max-width: 372px) {
+  .brand img {
+    height: 32px;
   }
 }
 
