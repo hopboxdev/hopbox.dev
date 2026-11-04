@@ -271,10 +271,6 @@ a:where(:hover) {
   font: inherit;
 }
 
-.code-comment {
-  color: var(--color-text-muted);
-}
-
 /* A quoted value cannot split with a backslash, so it wraps visually with a hanging indent. */
 .code-wrap {
   display: inline-block;
@@ -283,8 +279,9 @@ a:where(:hover) {
   white-space: pre-wrap;
 }
 
-/* The prompt stays out of a selection, so a copied command runs as it is. */
-.prompt {
+/* These stay out of a selection, because a shell reads a pasted $, >, or # as part of a command. */
+.prompt,
+.code-comment {
   color: var(--color-text-muted);
   -webkit-user-select: none;
   user-select: none;
@@ -384,10 +381,27 @@ a:where(:hover) {
   margin-bottom: 0;
 }
 
-.code-panel {
+.code-stack {
   flex: 1 1 600px;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.code-panel {
   padding: var(--space-5);
+}
+
+.agent-prompt {
+  white-space: normal;
+  overflow-x: visible;
+}
+
+.agent-prompt-text {
+  padding-left: 2ch;
+  text-indent: -2ch;
+  text-wrap: balance;
 }
 
 .section-head {
@@ -671,7 +685,7 @@ a:where(:hover) {
   }
 
   .agents-copy,
-  .code-panel {
+  .code-stack {
     flex-basis: 100%;
   }
 
@@ -892,10 +906,13 @@ a:where(:hover) {
   }
 }
 
-/* The longest line needs 252 px, so below 360 px the block fills the panel width. */
+/* The longest line needs 252 px, so below 360 px the blocks fill the panel width. */
 @media (max-width: 359px) {
-  .code-panel {
+  .code-stack {
     margin-inline: calc(var(--space-4) * -1);
+  }
+
+  .code-panel {
     border-inline: none;
     border-radius: 0;
   }
