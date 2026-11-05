@@ -934,8 +934,8 @@ a:where(:hover) {
   }
 }
 
-/* The longest line needs 252 px, so below 360 px the blocks fill their panel or card, and a drag has no scrolling to race. */
-@media (max-width: 359px) {
+/* The longest line needs 252 px and fits from 352 px with no spare width, so the limit keeps 4 px for a browser that measures the font wider. The blocks fill their panel or card, and a drag has no scrolling to race. The .98 covers a zoomed screen, which can have a fractional width. */
+@media (max-width: 355.98px) {
   .code-stack,
   .case-code {
     margin-inline: calc(var(--space-4) * -1);
