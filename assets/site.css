@@ -547,6 +547,13 @@ a:where(:hover) {
   margin-bottom: var(--space-4);
 }
 
+/* This badge is wider than the panel on small phones, so it wraps there. A one-line badge has no spare width, so the centering shows only after a wrap. */
+.pr-tag .badge {
+  text-align: center;
+  text-wrap: balance;
+  white-space: normal;
+}
+
 .pr-title {
   max-width: 40rem;
   margin-bottom: var(--space-4);
